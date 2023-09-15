@@ -18,7 +18,7 @@ Some caveats:
 
 Comments with `#'` are taking advantage of a Roxygen documentation skeleton (see arguments for package-shaped development). Key functions from the `pls.R` file:
 
-```{r}
+```{r, collapse=TRUE}
 
 #' Retrieve URLs from IMLS
 #'
@@ -59,7 +59,7 @@ get_pls_urls <- \(url = 'https://www.imls.gov/research-evaluation/data-collectio
 
 This part is important: replaces things that aren't real values according to the PLS documentation with NAs that R can recognize. 
 
-```{r}
+```{r, collapse=TRUE}
 #' @param file Path to file (inherited from wrapper function).
 #' @param response Either 'outlet' or 'admin'.
 #' @param fy Expects `fy20..` format used elsewhere.
@@ -104,7 +104,7 @@ We can work with that!
 
 Caveats about `curl` and `here` notwithstanding, these functions download files from the IMLS website, identify which CSV is which (we care about outlets and administrative entities), and save them in a more predictable structure.
 
-```{r}
+```{r, collapse=TRUE}
 #' Retrieve CSVs from IMLS zip file
 #'
 #' @description
@@ -190,7 +190,7 @@ get_pls_data <- \(pls,
 ```
 
 The utility functions `check_nrow` and `check_nrows` were custom (in `R/utils.R`): 
-```{r}
+```{r, collapse=TRUE}
 #' Number of rows in a fread-legible file
 #'
 #' @description
