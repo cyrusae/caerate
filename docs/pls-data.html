@@ -198,69 +198,69 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="pls-download-and-cleaning-utilities" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> PLS download and cleaning utilities<a href="pls-data.html#pls-download-and-cleaning-utilities" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Comments with <code>#'</code> are taking advantage of a Roxygen documentation skeleton (see arguments for package-shaped development). Key functions from the <code>pls.R</code> file:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="pls-data.html#cb26-1" tabindex="-1"></a><span class="co">#&#39; Retrieve URLs from IMLS</span></span>
-<span id="cb26-2"><a href="pls-data.html#cb26-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb26-3"><a href="pls-data.html#cb26-3" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
-<span id="cb26-4"><a href="pls-data.html#cb26-4" tabindex="-1"></a><span class="co">#&#39; Hits the IMLS page for PLS data dumps and returns a vector of URLs we want to download.</span></span>
-<span id="cb26-5"><a href="pls-data.html#cb26-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb26-6"><a href="pls-data.html#cb26-6" tabindex="-1"></a><span class="co">#&#39; @details</span></span>
-<span id="cb26-7"><a href="pls-data.html#cb26-7" tabindex="-1"></a><span class="co">#&#39; Future-proofing concerns: this works as long as the IMLS keeps putting things on their website as it worked in 2023 and don&#39;t come up with a new name scheme for files. If they do the latter, consider searching for a) links to zip files and b) links closest to the string &#39;CSV&#39;--it works now because the CSVs are the first/default option. Their file name scheme has been consistent since 2014, which happily enough is the timeframe TASCHA wants anyway, but if you want to go back further the parameter to change is `grepl` (consider trying `&#39;*.zip&#39;`, maybe).</span></span>
-<span id="cb26-8"><a href="pls-data.html#cb26-8" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb26-9"><a href="pls-data.html#cb26-9" tabindex="-1"></a><span class="co">#&#39; @param url Full address of the page on the IMLS site to retrieve download URLs from. Currently `&#39;https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey&#39;`. (Is a parameter to allow for unit testing, if this changes we probably have bigger problems.)</span></span>
-<span id="cb26-10"><a href="pls-data.html#cb26-10" tabindex="-1"></a><span class="co">#&#39; @param site IMLS site the download URLs expect as a prefix (`&#39;https://www.imls.gov&#39;`). Above parenthetical applies!</span></span>
-<span id="cb26-11"><a href="pls-data.html#cb26-11" tabindex="-1"></a><span class="co">#&#39; @param xpath Node from the IMLS page to look for results in. At time of writing the one that works is `&#39;//*[@data-ui-role=&quot;accordion&quot;]&#39;`. Used as `xpath` input for `rvest`.</span></span>
-<span id="cb26-12"><a href="pls-data.html#cb26-12" tabindex="-1"></a><span class="co">#&#39; @param element Element to retrieve contents of. Used as input for `rvest`. Default `&#39;a&#39;` (we are looking for links).</span></span>
-<span id="cb26-13"><a href="pls-data.html#cb26-13" tabindex="-1"></a><span class="co">#&#39; @param grepl Regex identifying a file that&#39;s relevant. Default `&#39;*pls_fy&#39;` (returns 2014-present because that happens to be how long they&#39;ve been consistently using that).</span></span>
-<span id="cb26-14"><a href="pls-data.html#cb26-14" tabindex="-1"></a><span class="co">#&#39; @param extract Regex to determine name scheme for FY extraction. Default `&#39;fy20..&#39;` (produces results like `&#39;fy2045&#39;`).</span></span>
-<span id="cb26-15"><a href="pls-data.html#cb26-15" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb26-16"><a href="pls-data.html#cb26-16" tabindex="-1"></a><span class="co">#&#39; @returns A named character vector of URLs to download and their corresponding reporting years.</span></span>
-<span id="cb26-17"><a href="pls-data.html#cb26-17" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb26-18"><a href="pls-data.html#cb26-18" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb26-19"><a href="pls-data.html#cb26-19" tabindex="-1"></a>get_pls_urls <span class="ot">&lt;-</span> \(<span class="at">url =</span> <span class="st">&#39;https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey&#39;</span>,</span>
-<span id="cb26-20"><a href="pls-data.html#cb26-20" tabindex="-1"></a>                  <span class="at">site =</span> <span class="st">&#39;https://www.imls.gov&#39;</span>,</span>
-<span id="cb26-21"><a href="pls-data.html#cb26-21" tabindex="-1"></a>                  <span class="at">xpath =</span> <span class="st">&#39;//*[@data-ui-role=&quot;accordion&quot;]&#39;</span>,</span>
-<span id="cb26-22"><a href="pls-data.html#cb26-22" tabindex="-1"></a>                  <span class="at">element =</span> <span class="st">&#39;a&#39;</span>,</span>
-<span id="cb26-23"><a href="pls-data.html#cb26-23" tabindex="-1"></a>                  <span class="at">grepl =</span> <span class="st">&#39;*pls_fy&#39;</span>,</span>
-<span id="cb26-24"><a href="pls-data.html#cb26-24" tabindex="-1"></a>                  <span class="at">extract =</span> <span class="st">&#39;fy20..&#39;</span>) {</span>
-<span id="cb26-25"><a href="pls-data.html#cb26-25" tabindex="-1"></a>  <span class="co"># </span><span class="al">TODO</span><span class="co"> validate inputs on principle</span></span>
-<span id="cb26-26"><a href="pls-data.html#cb26-26" tabindex="-1"></a>  pls <span class="ot">&lt;-</span> rvest<span class="sc">::</span><span class="fu">read_html</span>(url) <span class="sc">%&gt;%</span></span>
-<span id="cb26-27"><a href="pls-data.html#cb26-27" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_nodes</span>(<span class="at">xpath =</span> xpath) <span class="sc">%&gt;%</span></span>
-<span id="cb26-28"><a href="pls-data.html#cb26-28" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_children</span>() <span class="sc">%&gt;%</span> <span class="co">#the node contains years</span></span>
-<span id="cb26-29"><a href="pls-data.html#cb26-29" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_element</span>(element) <span class="sc">%&gt;%</span> <span class="co">#get the first link</span></span>
-<span id="cb26-30"><a href="pls-data.html#cb26-30" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_attrs</span>() <span class="co">#get the url that link refers to</span></span>
-<span id="cb26-31"><a href="pls-data.html#cb26-31" tabindex="-1"></a>  pls <span class="ot">&lt;-</span> pls[<span class="fu">grepl</span>(grepl, pls)] <span class="co">#reduce to real links</span></span>
-<span id="cb26-32"><a href="pls-data.html#cb26-32" tabindex="-1"></a>  pls <span class="ot">&lt;-</span> <span class="fu">paste0</span>(site, pls) <span class="co">#list of download URLs for zip files</span></span>
-<span id="cb26-33"><a href="pls-data.html#cb26-33" tabindex="-1"></a>  <span class="fu">names</span>(pls) <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(pls, extract) <span class="co">#list now has name of the FY each URL is for</span></span>
-<span id="cb26-34"><a href="pls-data.html#cb26-34" tabindex="-1"></a>  pls <span class="co">#return list (character vector) of URLs with their FYs as names</span></span>
-<span id="cb26-35"><a href="pls-data.html#cb26-35" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="pls-data.html#cb2-1" tabindex="-1"></a><span class="co">#&#39; Retrieve URLs from IMLS</span></span>
+<span id="cb2-2"><a href="pls-data.html#cb2-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-3"><a href="pls-data.html#cb2-3" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
+<span id="cb2-4"><a href="pls-data.html#cb2-4" tabindex="-1"></a><span class="co">#&#39; Hits the IMLS page for PLS data dumps and returns a vector of URLs we want to download.</span></span>
+<span id="cb2-5"><a href="pls-data.html#cb2-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-6"><a href="pls-data.html#cb2-6" tabindex="-1"></a><span class="co">#&#39; @details</span></span>
+<span id="cb2-7"><a href="pls-data.html#cb2-7" tabindex="-1"></a><span class="co">#&#39; Future-proofing concerns: this works as long as the IMLS keeps putting things on their website as it worked in 2023 and don&#39;t come up with a new name scheme for files. If they do the latter, consider searching for a) links to zip files and b) links closest to the string &#39;CSV&#39;--it works now because the CSVs are the first/default option. Their file name scheme has been consistent since 2014, which happily enough is the timeframe TASCHA wants anyway, but if you want to go back further the parameter to change is `grepl` (consider trying `&#39;*.zip&#39;`, maybe).</span></span>
+<span id="cb2-8"><a href="pls-data.html#cb2-8" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-9"><a href="pls-data.html#cb2-9" tabindex="-1"></a><span class="co">#&#39; @param url Full address of the page on the IMLS site to retrieve download URLs from. Currently `&#39;https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey&#39;`. (Is a parameter to allow for unit testing, if this changes we probably have bigger problems.)</span></span>
+<span id="cb2-10"><a href="pls-data.html#cb2-10" tabindex="-1"></a><span class="co">#&#39; @param site IMLS site the download URLs expect as a prefix (`&#39;https://www.imls.gov&#39;`). Above parenthetical applies!</span></span>
+<span id="cb2-11"><a href="pls-data.html#cb2-11" tabindex="-1"></a><span class="co">#&#39; @param xpath Node from the IMLS page to look for results in. At time of writing the one that works is `&#39;//*[@data-ui-role=&quot;accordion&quot;]&#39;`. Used as `xpath` input for `rvest`.</span></span>
+<span id="cb2-12"><a href="pls-data.html#cb2-12" tabindex="-1"></a><span class="co">#&#39; @param element Element to retrieve contents of. Used as input for `rvest`. Default `&#39;a&#39;` (we are looking for links).</span></span>
+<span id="cb2-13"><a href="pls-data.html#cb2-13" tabindex="-1"></a><span class="co">#&#39; @param grepl Regex identifying a file that&#39;s relevant. Default `&#39;*pls_fy&#39;` (returns 2014-present because that happens to be how long they&#39;ve been consistently using that).</span></span>
+<span id="cb2-14"><a href="pls-data.html#cb2-14" tabindex="-1"></a><span class="co">#&#39; @param extract Regex to determine name scheme for FY extraction. Default `&#39;fy20..&#39;` (produces results like `&#39;fy2045&#39;`).</span></span>
+<span id="cb2-15"><a href="pls-data.html#cb2-15" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-16"><a href="pls-data.html#cb2-16" tabindex="-1"></a><span class="co">#&#39; @returns A named character vector of URLs to download and their corresponding reporting years.</span></span>
+<span id="cb2-17"><a href="pls-data.html#cb2-17" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb2-18"><a href="pls-data.html#cb2-18" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-19"><a href="pls-data.html#cb2-19" tabindex="-1"></a>get_pls_urls <span class="ot">&lt;-</span> \(<span class="at">url =</span> <span class="st">&#39;https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey&#39;</span>,</span>
+<span id="cb2-20"><a href="pls-data.html#cb2-20" tabindex="-1"></a>                  <span class="at">site =</span> <span class="st">&#39;https://www.imls.gov&#39;</span>,</span>
+<span id="cb2-21"><a href="pls-data.html#cb2-21" tabindex="-1"></a>                  <span class="at">xpath =</span> <span class="st">&#39;//*[@data-ui-role=&quot;accordion&quot;]&#39;</span>,</span>
+<span id="cb2-22"><a href="pls-data.html#cb2-22" tabindex="-1"></a>                  <span class="at">element =</span> <span class="st">&#39;a&#39;</span>,</span>
+<span id="cb2-23"><a href="pls-data.html#cb2-23" tabindex="-1"></a>                  <span class="at">grepl =</span> <span class="st">&#39;*pls_fy&#39;</span>,</span>
+<span id="cb2-24"><a href="pls-data.html#cb2-24" tabindex="-1"></a>                  <span class="at">extract =</span> <span class="st">&#39;fy20..&#39;</span>) {</span>
+<span id="cb2-25"><a href="pls-data.html#cb2-25" tabindex="-1"></a>  <span class="co"># </span><span class="al">TODO</span><span class="co"> validate inputs on principle</span></span>
+<span id="cb2-26"><a href="pls-data.html#cb2-26" tabindex="-1"></a>  pls <span class="ot">&lt;-</span> rvest<span class="sc">::</span><span class="fu">read_html</span>(url) <span class="sc">%&gt;%</span></span>
+<span id="cb2-27"><a href="pls-data.html#cb2-27" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_nodes</span>(<span class="at">xpath =</span> xpath) <span class="sc">%&gt;%</span></span>
+<span id="cb2-28"><a href="pls-data.html#cb2-28" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_children</span>() <span class="sc">%&gt;%</span> <span class="co">#the node contains years</span></span>
+<span id="cb2-29"><a href="pls-data.html#cb2-29" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_element</span>(element) <span class="sc">%&gt;%</span> <span class="co">#get the first link</span></span>
+<span id="cb2-30"><a href="pls-data.html#cb2-30" tabindex="-1"></a>    rvest<span class="sc">::</span><span class="fu">html_attrs</span>() <span class="co">#get the url that link refers to</span></span>
+<span id="cb2-31"><a href="pls-data.html#cb2-31" tabindex="-1"></a>  pls <span class="ot">&lt;-</span> pls[<span class="fu">grepl</span>(grepl, pls)] <span class="co">#reduce to real links</span></span>
+<span id="cb2-32"><a href="pls-data.html#cb2-32" tabindex="-1"></a>  pls <span class="ot">&lt;-</span> <span class="fu">paste0</span>(site, pls) <span class="co">#list of download URLs for zip files</span></span>
+<span id="cb2-33"><a href="pls-data.html#cb2-33" tabindex="-1"></a>  <span class="fu">names</span>(pls) <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(pls, extract) <span class="co">#list now has name of the FY each URL is for</span></span>
+<span id="cb2-34"><a href="pls-data.html#cb2-34" tabindex="-1"></a>  pls <span class="co">#return list (character vector) of URLs with their FYs as names</span></span>
+<span id="cb2-35"><a href="pls-data.html#cb2-35" tabindex="-1"></a>}</span></code></pre></div>
 <p>This part is important: replaces things that aren’t real values according to the PLS documentation with NAs that R can recognize.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="pls-data.html#cb27-1" tabindex="-1"></a><span class="co">#&#39; @param file Path to file (inherited from wrapper function).</span></span>
-<span id="cb27-2"><a href="pls-data.html#cb27-2" tabindex="-1"></a><span class="co">#&#39; @param response Either &#39;outlet&#39; or &#39;admin&#39;.</span></span>
-<span id="cb27-3"><a href="pls-data.html#cb27-3" tabindex="-1"></a><span class="co">#&#39; @param fy Expects `fy20..` format used elsewhere.</span></span>
-<span id="cb27-4"><a href="pls-data.html#cb27-4" tabindex="-1"></a><span class="co">#&#39; @param here See general concerns with `here` usage.</span></span>
-<span id="cb27-5"><a href="pls-data.html#cb27-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb27-6"><a href="pls-data.html#cb27-6" tabindex="-1"></a><span class="co">#&#39; @returns The filepath for the single successfully written file.</span></span>
-<span id="cb27-7"><a href="pls-data.html#cb27-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb27-8"><a href="pls-data.html#cb27-8" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb27-9"><a href="pls-data.html#cb27-9" tabindex="-1"></a>get_pls_csv <span class="ot">&lt;-</span> \(file, response, fy, here) {</span>
-<span id="cb27-10"><a href="pls-data.html#cb27-10" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(file) <span class="co">#is the file readable?</span></span>
-<span id="cb27-11"><a href="pls-data.html#cb27-11" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.writeable</span>(here<span class="sc">::</span><span class="fu">here</span>(here)) <span class="co">#is the destination writable?</span></span>
-<span id="cb27-12"><a href="pls-data.html#cb27-12" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(fy) <span class="co">#is the input fy coherent?</span></span>
-<span id="cb27-13"><a href="pls-data.html#cb27-13" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(response) <span class="co">#do we know what the response is?</span></span>
-<span id="cb27-14"><a href="pls-data.html#cb27-14" tabindex="-1"></a>  dest <span class="ot">&lt;-</span> <span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(here), <span class="st">&#39;/pls_&#39;</span>,</span>
-<span id="cb27-15"><a href="pls-data.html#cb27-15" tabindex="-1"></a>                 response, <span class="st">&#39;_&#39;</span>, fy, <span class="st">&#39;.csv&#39;</span>)</span>
-<span id="cb27-16"><a href="pls-data.html#cb27-16" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="at">file =</span> file)</span>
-<span id="cb27-17"><a href="pls-data.html#cb27-17" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">9</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove suppressed data</span></span>
-<span id="cb27-18"><a href="pls-data.html#cb27-18" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove for closures</span></span>
-<span id="cb27-19"><a href="pls-data.html#cb27-19" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove for closures</span></span>
-<span id="cb27-20"><a href="pls-data.html#cb27-20" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove unanswered questions</span></span>
-<span id="cb27-21"><a href="pls-data.html#cb27-21" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="st">&#39;M&#39;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove missing values</span></span>
-<span id="cb27-22"><a href="pls-data.html#cb27-22" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&#39;MICROF&#39;</span> <span class="sc">%in%</span> <span class="fu">names</span>(dt)) dt[MICROF <span class="sc">==</span> <span class="st">&#39;N&#39;</span>, MICROF <span class="sc">:=</span> <span class="cn">NA</span>] <span class="co">#NA for the MICROF field only</span></span>
-<span id="cb27-23"><a href="pls-data.html#cb27-23" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&#39;RSTATUS&#39;</span> <span class="sc">%in%</span> <span class="fu">names</span>(dt)) dt[RSTATUS <span class="sc">==</span> <span class="dv">3</span>, RSTATUS <span class="sc">:=</span> <span class="cn">NA</span>] <span class="co">#remove nonrespondents</span></span>
-<span id="cb27-24"><a href="pls-data.html#cb27-24" tabindex="-1"></a>  data.table<span class="sc">::</span><span class="fu">fwrite</span>(dt, <span class="at">file =</span> dest)</span>
-<span id="cb27-25"><a href="pls-data.html#cb27-25" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(<span class="at">path =</span> dest)</span>
-<span id="cb27-26"><a href="pls-data.html#cb27-26" tabindex="-1"></a>  dest <span class="co">#return successfully-written file</span></span>
-<span id="cb27-27"><a href="pls-data.html#cb27-27" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="pls-data.html#cb3-1" tabindex="-1"></a><span class="co">#&#39; @param file Path to file (inherited from wrapper function).</span></span>
+<span id="cb3-2"><a href="pls-data.html#cb3-2" tabindex="-1"></a><span class="co">#&#39; @param response Either &#39;outlet&#39; or &#39;admin&#39;.</span></span>
+<span id="cb3-3"><a href="pls-data.html#cb3-3" tabindex="-1"></a><span class="co">#&#39; @param fy Expects `fy20..` format used elsewhere.</span></span>
+<span id="cb3-4"><a href="pls-data.html#cb3-4" tabindex="-1"></a><span class="co">#&#39; @param here See general concerns with `here` usage.</span></span>
+<span id="cb3-5"><a href="pls-data.html#cb3-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb3-6"><a href="pls-data.html#cb3-6" tabindex="-1"></a><span class="co">#&#39; @returns The filepath for the single successfully written file.</span></span>
+<span id="cb3-7"><a href="pls-data.html#cb3-7" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb3-8"><a href="pls-data.html#cb3-8" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb3-9"><a href="pls-data.html#cb3-9" tabindex="-1"></a>get_pls_csv <span class="ot">&lt;-</span> \(file, response, fy, here) {</span>
+<span id="cb3-10"><a href="pls-data.html#cb3-10" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(file) <span class="co">#is the file readable?</span></span>
+<span id="cb3-11"><a href="pls-data.html#cb3-11" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.writeable</span>(here<span class="sc">::</span><span class="fu">here</span>(here)) <span class="co">#is the destination writable?</span></span>
+<span id="cb3-12"><a href="pls-data.html#cb3-12" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(fy) <span class="co">#is the input fy coherent?</span></span>
+<span id="cb3-13"><a href="pls-data.html#cb3-13" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(response) <span class="co">#do we know what the response is?</span></span>
+<span id="cb3-14"><a href="pls-data.html#cb3-14" tabindex="-1"></a>  dest <span class="ot">&lt;-</span> <span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(here), <span class="st">&#39;/pls_&#39;</span>,</span>
+<span id="cb3-15"><a href="pls-data.html#cb3-15" tabindex="-1"></a>                 response, <span class="st">&#39;_&#39;</span>, fy, <span class="st">&#39;.csv&#39;</span>)</span>
+<span id="cb3-16"><a href="pls-data.html#cb3-16" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="at">file =</span> file)</span>
+<span id="cb3-17"><a href="pls-data.html#cb3-17" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">9</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove suppressed data</span></span>
+<span id="cb3-18"><a href="pls-data.html#cb3-18" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove for closures</span></span>
+<span id="cb3-19"><a href="pls-data.html#cb3-19" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove for closures</span></span>
+<span id="cb3-20"><a href="pls-data.html#cb3-20" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove unanswered questions</span></span>
+<span id="cb3-21"><a href="pls-data.html#cb3-21" tabindex="-1"></a>  dt[dt <span class="sc">==</span> <span class="st">&#39;M&#39;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#Remove missing values</span></span>
+<span id="cb3-22"><a href="pls-data.html#cb3-22" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&#39;MICROF&#39;</span> <span class="sc">%in%</span> <span class="fu">names</span>(dt)) dt[MICROF <span class="sc">==</span> <span class="st">&#39;N&#39;</span>, MICROF <span class="sc">:=</span> <span class="cn">NA</span>] <span class="co">#NA for the MICROF field only</span></span>
+<span id="cb3-23"><a href="pls-data.html#cb3-23" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&#39;RSTATUS&#39;</span> <span class="sc">%in%</span> <span class="fu">names</span>(dt)) dt[RSTATUS <span class="sc">==</span> <span class="dv">3</span>, RSTATUS <span class="sc">:=</span> <span class="cn">NA</span>] <span class="co">#remove nonrespondents</span></span>
+<span id="cb3-24"><a href="pls-data.html#cb3-24" tabindex="-1"></a>  data.table<span class="sc">::</span><span class="fu">fwrite</span>(dt, <span class="at">file =</span> dest)</span>
+<span id="cb3-25"><a href="pls-data.html#cb3-25" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(<span class="at">path =</span> dest)</span>
+<span id="cb3-26"><a href="pls-data.html#cb3-26" tabindex="-1"></a>  dest <span class="co">#return successfully-written file</span></span>
+<span id="cb3-27"><a href="pls-data.html#cb3-27" tabindex="-1"></a>}</span></code></pre></div>
 <p>The idiosyncratic PLS equivalents of NA:</p>
 <ul>
 <li>Negative numbers -9, -4, -3, and -1, which flag data suppressed for privacy reasons (libraries too small to be de-identified), temporary and permanent closures, and unanswered questions</li>
@@ -272,119 +272,119 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>PLS-specific problem: a single year comes in a zip file that has three CSVs in it… somewhere. Possibly in a nested folder. With nonstandard filenames. <em>But:</em> one is always library outlets and is the longest, one is always state-level data and is the shortest, and one is always in the middle.</p>
 <p>We can work with that!</p>
 <p>Caveats about <code>curl</code> and <code>here</code> notwithstanding, these functions download files from the IMLS website, identify which CSV is which (we care about outlets and administrative entities), and save them in a more predictable structure.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="pls-data.html#cb28-1" tabindex="-1"></a><span class="co">#&#39; Retrieve CSVs from IMLS zip file</span></span>
-<span id="cb28-2"><a href="pls-data.html#cb28-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-3"><a href="pls-data.html#cb28-3" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
-<span id="cb28-4"><a href="pls-data.html#cb28-4" tabindex="-1"></a><span class="co">#&#39; Download a single zip file from the IMLS website (if needed), extract only the contents that are CSV files, identify and rename the outlet and administrative entity PLS responses, and return the paths to those files while deleting the intermediary files.</span></span>
-<span id="cb28-5"><a href="pls-data.html#cb28-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-6"><a href="pls-data.html#cb28-6" tabindex="-1"></a><span class="co">#&#39; @details</span></span>
-<span id="cb28-7"><a href="pls-data.html#cb28-7" tabindex="-1"></a><span class="co">#&#39; Development concerns: Current use of `here` is more brittle than I want it to be but I haven&#39;t figured out what the better long-term way to handle that is.</span></span>
-<span id="cb28-8"><a href="pls-data.html#cb28-8" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-9"><a href="pls-data.html#cb28-9" tabindex="-1"></a><span class="co">#&#39; @param url URL leading to a single zip of CSV files on the IMLS website (see `get_pls_urls()`).</span></span>
-<span id="cb28-10"><a href="pls-data.html#cb28-10" tabindex="-1"></a><span class="co">#&#39; @param extract Regex to determine name scheme for FY extraction. Default `&#39;fy20..&#39;` (produces results like `&#39;fy2045&#39;`).</span></span>
-<span id="cb28-11"><a href="pls-data.html#cb28-11" tabindex="-1"></a><span class="co">#&#39; @param here String describing the intended destination path. Default `&#39;data/raw/PLS_csvs&#39;`. Needs refinement as a feature.</span></span>
-<span id="cb28-12"><a href="pls-data.html#cb28-12" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-13"><a href="pls-data.html#cb28-13" tabindex="-1"></a><span class="co">#&#39; @returns A named character vector of length 2 containing the paths to the admin and outlet PLS responses.</span></span>
-<span id="cb28-14"><a href="pls-data.html#cb28-14" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb28-15"><a href="pls-data.html#cb28-15" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-16"><a href="pls-data.html#cb28-16" tabindex="-1"></a>get_pls_zip <span class="ot">&lt;-</span> \(<span class="at">url =</span> url,</span>
-<span id="cb28-17"><a href="pls-data.html#cb28-17" tabindex="-1"></a>                 <span class="at">extract =</span> <span class="st">&#39;fy20..&#39;</span>,</span>
-<span id="cb28-18"><a href="pls-data.html#cb28-18" tabindex="-1"></a>                 <span class="at">here =</span> <span class="st">&#39;data/raw/PLS_csvs&#39;</span>) {</span>
-<span id="cb28-19"><a href="pls-data.html#cb28-19" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(url) <span class="co">#Did we get a URL that we can ping</span></span>
-<span id="cb28-20"><a href="pls-data.html#cb28-20" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(here) <span class="co">#Is the desired path viable</span></span>
-<span id="cb28-21"><a href="pls-data.html#cb28-21" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">names</span>(url))) {</span>
-<span id="cb28-22"><a href="pls-data.html#cb28-22" tabindex="-1"></a>    fy <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(url, extract)</span>
-<span id="cb28-23"><a href="pls-data.html#cb28-23" tabindex="-1"></a>    assertthat<span class="sc">::</span><span class="fu">assert_that</span>(<span class="fu">length</span>(fy) <span class="sc">==</span> <span class="fu">length</span>(extract))</span>
-<span id="cb28-24"><a href="pls-data.html#cb28-24" tabindex="-1"></a>    <span class="fu">names</span>(url) <span class="ot">&lt;-</span> fy</span>
-<span id="cb28-25"><a href="pls-data.html#cb28-25" tabindex="-1"></a>  }</span>
-<span id="cb28-26"><a href="pls-data.html#cb28-26" tabindex="-1"></a>  fy <span class="ot">&lt;-</span> <span class="fu">names</span>(url) <span class="co">#Get the FY value out</span></span>
-<span id="cb28-27"><a href="pls-data.html#cb28-27" tabindex="-1"></a>  fp <span class="ot">&lt;-</span> <span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(here), <span class="st">&#39;/&#39;</span>, fy)</span>
-<span id="cb28-28"><a href="pls-data.html#cb28-28" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(fp)) <span class="fu">dir.create</span>(fp) <span class="co">#Create directory if needed</span></span>
-<span id="cb28-29"><a href="pls-data.html#cb28-29" tabindex="-1"></a>  <span class="co">#Note: still deciding whether we&#39;re keeping the zip files and deleting everything else or what</span></span>
-<span id="cb28-30"><a href="pls-data.html#cb28-30" tabindex="-1"></a>  <span class="co">#TODO Add error handling once we&#39;re sure of cleanup steps</span></span>
-<span id="cb28-31"><a href="pls-data.html#cb28-31" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.writeable</span>(fp) <span class="co">#Can we write to the directory</span></span>
-<span id="cb28-32"><a href="pls-data.html#cb28-32" tabindex="-1"></a>  zipfile <span class="ot">&lt;-</span> <span class="fu">paste0</span>(fp, <span class="st">&#39;/&#39;</span>, fy, <span class="st">&#39;.zip&#39;</span>)</span>
-<span id="cb28-33"><a href="pls-data.html#cb28-33" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(zipfile)) {</span>
-<span id="cb28-34"><a href="pls-data.html#cb28-34" tabindex="-1"></a>    <span class="fu">download.file</span>(<span class="at">url =</span> url, <span class="at">destfile =</span> zipfile, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb28-35"><a href="pls-data.html#cb28-35" tabindex="-1"></a>  } <span class="co">#Download a file if it doesn&#39;t appear to exist yet</span></span>
-<span id="cb28-36"><a href="pls-data.html#cb28-36" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(zipfile) <span class="co">#Did we get the zip successfully (or have it already)?</span></span>
-<span id="cb28-37"><a href="pls-data.html#cb28-37" tabindex="-1"></a>  zip_contents <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">&#39;</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">.csv$&#39;</span>, <span class="co">#find only the CSV files</span></span>
-<span id="cb28-38"><a href="pls-data.html#cb28-38" tabindex="-1"></a>                       <span class="fu">unzip</span>(<span class="at">zipfile =</span> zipfile,</span>
-<span id="cb28-39"><a href="pls-data.html#cb28-39" tabindex="-1"></a>                             <span class="at">list =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>Name, <span class="co">#Names only</span></span>
-<span id="cb28-40"><a href="pls-data.html#cb28-40" tabindex="-1"></a>                       <span class="at">ignore.case =</span> <span class="cn">TRUE</span>, <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb28-41"><a href="pls-data.html#cb28-41" tabindex="-1"></a>  <span class="fu">unzip</span>(<span class="at">zipfile =</span> zipfile, <span class="at">files =</span> zip_contents,</span>
-<span id="cb28-42"><a href="pls-data.html#cb28-42" tabindex="-1"></a>        <span class="at">exdir =</span> fp) <span class="co">#put the CSV files in the /fy20XX/ directory</span></span>
-<span id="cb28-43"><a href="pls-data.html#cb28-43" tabindex="-1"></a>  zip_contents <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> fp, <span class="at">pattern =</span> <span class="st">&#39;</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">.csv$&#39;</span>,</span>
-<span id="cb28-44"><a href="pls-data.html#cb28-44" tabindex="-1"></a>                             <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb28-45"><a href="pls-data.html#cb28-45" tabindex="-1"></a>                             <span class="at">include.dirs =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb28-46"><a href="pls-data.html#cb28-46" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">assert_that</span>(<span class="fu">length</span>(zip_contents) <span class="sc">==</span> <span class="dv">3</span>) <span class="co">#make sure there are specifically three CSV files here</span></span>
-<span id="cb28-47"><a href="pls-data.html#cb28-47" tabindex="-1"></a>  zip_nrows <span class="ot">&lt;-</span> <span class="fu">check_nrows</span>(<span class="at">files =</span> zip_contents)</span>
-<span id="cb28-48"><a href="pls-data.html#cb28-48" tabindex="-1"></a>  zip_results <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(</span>
-<span id="cb28-49"><a href="pls-data.html#cb28-49" tabindex="-1"></a>    <span class="at">path =</span> zip_contents,</span>
-<span id="cb28-50"><a href="pls-data.html#cb28-50" tabindex="-1"></a>    <span class="at">nrows =</span> zip_nrows</span>
-<span id="cb28-51"><a href="pls-data.html#cb28-51" tabindex="-1"></a>  ) <span class="co">#track features about the files that we&#39;ll need in a bit</span></span>
-<span id="cb28-52"><a href="pls-data.html#cb28-52" tabindex="-1"></a>  zip_results <span class="ot">&lt;-</span> zip_results[nrows <span class="sc">!=</span> <span class="fu">min</span>(nrows), ] <span class="co">#remove the states file from consideration</span></span>
-<span id="cb28-53"><a href="pls-data.html#cb28-53" tabindex="-1"></a>  zip_results[nrows <span class="sc">==</span> <span class="fu">max</span>(nrows),</span>
-<span id="cb28-54"><a href="pls-data.html#cb28-54" tabindex="-1"></a>              response <span class="sc">:=</span> <span class="st">&#39;outlet&#39;</span>] <span class="co">#largest file will be outlets</span></span>
-<span id="cb28-55"><a href="pls-data.html#cb28-55" tabindex="-1"></a>  zip_results[nrows <span class="sc">==</span> <span class="fu">min</span>(nrows),</span>
-<span id="cb28-56"><a href="pls-data.html#cb28-56" tabindex="-1"></a>              response <span class="sc">:=</span> <span class="st">&#39;admin&#39;</span>] <span class="co">#remaining will be administrative entities</span></span>
-<span id="cb28-57"><a href="pls-data.html#cb28-57" tabindex="-1"></a>  csvs <span class="ot">&lt;-</span> furrr<span class="sc">::</span><span class="fu">future_map2_chr</span>(<span class="at">.x =</span> zip_results<span class="sc">$</span>path,</span>
-<span id="cb28-58"><a href="pls-data.html#cb28-58" tabindex="-1"></a>                                 <span class="at">.y =</span> zip_results<span class="sc">$</span>response,</span>
-<span id="cb28-59"><a href="pls-data.html#cb28-59" tabindex="-1"></a>                                 <span class="at">.f =</span> get_pls_csv,</span>
-<span id="cb28-60"><a href="pls-data.html#cb28-60" tabindex="-1"></a>                                 <span class="at">fy =</span> fy, <span class="at">here =</span> here)</span>
-<span id="cb28-61"><a href="pls-data.html#cb28-61" tabindex="-1"></a>  <span class="co"># Clean up</span></span>
-<span id="cb28-62"><a href="pls-data.html#cb28-62" tabindex="-1"></a>  process_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> fp, <span class="at">full.names =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-63"><a href="pls-data.html#cb28-63" tabindex="-1"></a>    <span class="fu">setdiff</span>(zipfile) <span class="co">#Get everything but the original zip</span></span>
-<span id="cb28-64"><a href="pls-data.html#cb28-64" tabindex="-1"></a>  <span class="fu">unlink</span>(process_files, <span class="at">recursive =</span> <span class="cn">TRUE</span>) <span class="co">#Delete</span></span>
-<span id="cb28-65"><a href="pls-data.html#cb28-65" tabindex="-1"></a>  csvs <span class="co">#return paths to created files</span></span>
-<span id="cb28-66"><a href="pls-data.html#cb28-66" tabindex="-1"></a>}</span>
-<span id="cb28-67"><a href="pls-data.html#cb28-67" tabindex="-1"></a></span>
-<span id="cb28-68"><a href="pls-data.html#cb28-68" tabindex="-1"></a><span class="co">#&#39; Use list of PLS URLs</span></span>
-<span id="cb28-69"><a href="pls-data.html#cb28-69" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-70"><a href="pls-data.html#cb28-70" tabindex="-1"></a><span class="co">#&#39; @param pls Character vector of PLS URLs (see `get_pls_urls()`); expects to find names in `fy20..` format also.</span></span>
-<span id="cb28-71"><a href="pls-data.html#cb28-71" tabindex="-1"></a><span class="co">#&#39; @param extract Fallback regex to get the names described above.</span></span>
-<span id="cb28-72"><a href="pls-data.html#cb28-72" tabindex="-1"></a><span class="co">#&#39; @param here String describing the intended destination path. Default `&#39;data/raw/PLS_csvs&#39;`. Needs refinement as a feature.</span></span>
-<span id="cb28-73"><a href="pls-data.html#cb28-73" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-74"><a href="pls-data.html#cb28-74" tabindex="-1"></a><span class="co">#&#39; @return Returns a list of the filenames being produced.</span></span>
-<span id="cb28-75"><a href="pls-data.html#cb28-75" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb28-76"><a href="pls-data.html#cb28-76" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb28-77"><a href="pls-data.html#cb28-77" tabindex="-1"></a>get_pls_data <span class="ot">&lt;-</span> \(pls,</span>
-<span id="cb28-78"><a href="pls-data.html#cb28-78" tabindex="-1"></a>                  <span class="at">extract =</span> <span class="st">&#39;fy20..&#39;</span>,</span>
-<span id="cb28-79"><a href="pls-data.html#cb28-79" tabindex="-1"></a>                  <span class="at">here =</span> <span class="st">&#39;data/raw/PLS_csvs&#39;</span>) {</span>
-<span id="cb28-80"><a href="pls-data.html#cb28-80" tabindex="-1"></a>  files <span class="ot">&lt;-</span> furrr<span class="sc">::</span><span class="fu">future_map</span>(<span class="at">.x =</span> pls, <span class="at">.f =</span> get_pls_data,</span>
-<span id="cb28-81"><a href="pls-data.html#cb28-81" tabindex="-1"></a>                             <span class="at">extract =</span> extract, <span class="at">here =</span> here)</span>
-<span id="cb28-82"><a href="pls-data.html#cb28-82" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="pls-data.html#cb4-1" tabindex="-1"></a><span class="co">#&#39; Retrieve CSVs from IMLS zip file</span></span>
+<span id="cb4-2"><a href="pls-data.html#cb4-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-3"><a href="pls-data.html#cb4-3" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
+<span id="cb4-4"><a href="pls-data.html#cb4-4" tabindex="-1"></a><span class="co">#&#39; Download a single zip file from the IMLS website (if needed), extract only the contents that are CSV files, identify and rename the outlet and administrative entity PLS responses, and return the paths to those files while deleting the intermediary files.</span></span>
+<span id="cb4-5"><a href="pls-data.html#cb4-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-6"><a href="pls-data.html#cb4-6" tabindex="-1"></a><span class="co">#&#39; @details</span></span>
+<span id="cb4-7"><a href="pls-data.html#cb4-7" tabindex="-1"></a><span class="co">#&#39; Development concerns: Current use of `here` is more brittle than I want it to be but I haven&#39;t figured out what the better long-term way to handle that is.</span></span>
+<span id="cb4-8"><a href="pls-data.html#cb4-8" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-9"><a href="pls-data.html#cb4-9" tabindex="-1"></a><span class="co">#&#39; @param url URL leading to a single zip of CSV files on the IMLS website (see `get_pls_urls()`).</span></span>
+<span id="cb4-10"><a href="pls-data.html#cb4-10" tabindex="-1"></a><span class="co">#&#39; @param extract Regex to determine name scheme for FY extraction. Default `&#39;fy20..&#39;` (produces results like `&#39;fy2045&#39;`).</span></span>
+<span id="cb4-11"><a href="pls-data.html#cb4-11" tabindex="-1"></a><span class="co">#&#39; @param here String describing the intended destination path. Default `&#39;data/raw/PLS_csvs&#39;`. Needs refinement as a feature.</span></span>
+<span id="cb4-12"><a href="pls-data.html#cb4-12" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-13"><a href="pls-data.html#cb4-13" tabindex="-1"></a><span class="co">#&#39; @returns A named character vector of length 2 containing the paths to the admin and outlet PLS responses.</span></span>
+<span id="cb4-14"><a href="pls-data.html#cb4-14" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb4-15"><a href="pls-data.html#cb4-15" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-16"><a href="pls-data.html#cb4-16" tabindex="-1"></a>get_pls_zip <span class="ot">&lt;-</span> \(<span class="at">url =</span> url,</span>
+<span id="cb4-17"><a href="pls-data.html#cb4-17" tabindex="-1"></a>                 <span class="at">extract =</span> <span class="st">&#39;fy20..&#39;</span>,</span>
+<span id="cb4-18"><a href="pls-data.html#cb4-18" tabindex="-1"></a>                 <span class="at">here =</span> <span class="st">&#39;data/raw/PLS_csvs&#39;</span>) {</span>
+<span id="cb4-19"><a href="pls-data.html#cb4-19" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(url) <span class="co">#Did we get a URL that we can ping</span></span>
+<span id="cb4-20"><a href="pls-data.html#cb4-20" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.string</span>(here) <span class="co">#Is the desired path viable</span></span>
+<span id="cb4-21"><a href="pls-data.html#cb4-21" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">names</span>(url))) {</span>
+<span id="cb4-22"><a href="pls-data.html#cb4-22" tabindex="-1"></a>    fy <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(url, extract)</span>
+<span id="cb4-23"><a href="pls-data.html#cb4-23" tabindex="-1"></a>    assertthat<span class="sc">::</span><span class="fu">assert_that</span>(<span class="fu">length</span>(fy) <span class="sc">==</span> <span class="fu">length</span>(extract))</span>
+<span id="cb4-24"><a href="pls-data.html#cb4-24" tabindex="-1"></a>    <span class="fu">names</span>(url) <span class="ot">&lt;-</span> fy</span>
+<span id="cb4-25"><a href="pls-data.html#cb4-25" tabindex="-1"></a>  }</span>
+<span id="cb4-26"><a href="pls-data.html#cb4-26" tabindex="-1"></a>  fy <span class="ot">&lt;-</span> <span class="fu">names</span>(url) <span class="co">#Get the FY value out</span></span>
+<span id="cb4-27"><a href="pls-data.html#cb4-27" tabindex="-1"></a>  fp <span class="ot">&lt;-</span> <span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(here), <span class="st">&#39;/&#39;</span>, fy)</span>
+<span id="cb4-28"><a href="pls-data.html#cb4-28" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(fp)) <span class="fu">dir.create</span>(fp) <span class="co">#Create directory if needed</span></span>
+<span id="cb4-29"><a href="pls-data.html#cb4-29" tabindex="-1"></a>  <span class="co">#Note: still deciding whether we&#39;re keeping the zip files and deleting everything else or what</span></span>
+<span id="cb4-30"><a href="pls-data.html#cb4-30" tabindex="-1"></a>  <span class="co">#TODO Add error handling once we&#39;re sure of cleanup steps</span></span>
+<span id="cb4-31"><a href="pls-data.html#cb4-31" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.writeable</span>(fp) <span class="co">#Can we write to the directory</span></span>
+<span id="cb4-32"><a href="pls-data.html#cb4-32" tabindex="-1"></a>  zipfile <span class="ot">&lt;-</span> <span class="fu">paste0</span>(fp, <span class="st">&#39;/&#39;</span>, fy, <span class="st">&#39;.zip&#39;</span>)</span>
+<span id="cb4-33"><a href="pls-data.html#cb4-33" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(zipfile)) {</span>
+<span id="cb4-34"><a href="pls-data.html#cb4-34" tabindex="-1"></a>    <span class="fu">download.file</span>(<span class="at">url =</span> url, <span class="at">destfile =</span> zipfile, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-35"><a href="pls-data.html#cb4-35" tabindex="-1"></a>  } <span class="co">#Download a file if it doesn&#39;t appear to exist yet</span></span>
+<span id="cb4-36"><a href="pls-data.html#cb4-36" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(zipfile) <span class="co">#Did we get the zip successfully (or have it already)?</span></span>
+<span id="cb4-37"><a href="pls-data.html#cb4-37" tabindex="-1"></a>  zip_contents <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">&#39;</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">.csv$&#39;</span>, <span class="co">#find only the CSV files</span></span>
+<span id="cb4-38"><a href="pls-data.html#cb4-38" tabindex="-1"></a>                       <span class="fu">unzip</span>(<span class="at">zipfile =</span> zipfile,</span>
+<span id="cb4-39"><a href="pls-data.html#cb4-39" tabindex="-1"></a>                             <span class="at">list =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>Name, <span class="co">#Names only</span></span>
+<span id="cb4-40"><a href="pls-data.html#cb4-40" tabindex="-1"></a>                       <span class="at">ignore.case =</span> <span class="cn">TRUE</span>, <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-41"><a href="pls-data.html#cb4-41" tabindex="-1"></a>  <span class="fu">unzip</span>(<span class="at">zipfile =</span> zipfile, <span class="at">files =</span> zip_contents,</span>
+<span id="cb4-42"><a href="pls-data.html#cb4-42" tabindex="-1"></a>        <span class="at">exdir =</span> fp) <span class="co">#put the CSV files in the /fy20XX/ directory</span></span>
+<span id="cb4-43"><a href="pls-data.html#cb4-43" tabindex="-1"></a>  zip_contents <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> fp, <span class="at">pattern =</span> <span class="st">&#39;</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">.csv$&#39;</span>,</span>
+<span id="cb4-44"><a href="pls-data.html#cb4-44" tabindex="-1"></a>                             <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-45"><a href="pls-data.html#cb4-45" tabindex="-1"></a>                             <span class="at">include.dirs =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-46"><a href="pls-data.html#cb4-46" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">assert_that</span>(<span class="fu">length</span>(zip_contents) <span class="sc">==</span> <span class="dv">3</span>) <span class="co">#make sure there are specifically three CSV files here</span></span>
+<span id="cb4-47"><a href="pls-data.html#cb4-47" tabindex="-1"></a>  zip_nrows <span class="ot">&lt;-</span> <span class="fu">check_nrows</span>(<span class="at">files =</span> zip_contents)</span>
+<span id="cb4-48"><a href="pls-data.html#cb4-48" tabindex="-1"></a>  zip_results <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(</span>
+<span id="cb4-49"><a href="pls-data.html#cb4-49" tabindex="-1"></a>    <span class="at">path =</span> zip_contents,</span>
+<span id="cb4-50"><a href="pls-data.html#cb4-50" tabindex="-1"></a>    <span class="at">nrows =</span> zip_nrows</span>
+<span id="cb4-51"><a href="pls-data.html#cb4-51" tabindex="-1"></a>  ) <span class="co">#track features about the files that we&#39;ll need in a bit</span></span>
+<span id="cb4-52"><a href="pls-data.html#cb4-52" tabindex="-1"></a>  zip_results <span class="ot">&lt;-</span> zip_results[nrows <span class="sc">!=</span> <span class="fu">min</span>(nrows), ] <span class="co">#remove the states file from consideration</span></span>
+<span id="cb4-53"><a href="pls-data.html#cb4-53" tabindex="-1"></a>  zip_results[nrows <span class="sc">==</span> <span class="fu">max</span>(nrows),</span>
+<span id="cb4-54"><a href="pls-data.html#cb4-54" tabindex="-1"></a>              response <span class="sc">:=</span> <span class="st">&#39;outlet&#39;</span>] <span class="co">#largest file will be outlets</span></span>
+<span id="cb4-55"><a href="pls-data.html#cb4-55" tabindex="-1"></a>  zip_results[nrows <span class="sc">==</span> <span class="fu">min</span>(nrows),</span>
+<span id="cb4-56"><a href="pls-data.html#cb4-56" tabindex="-1"></a>              response <span class="sc">:=</span> <span class="st">&#39;admin&#39;</span>] <span class="co">#remaining will be administrative entities</span></span>
+<span id="cb4-57"><a href="pls-data.html#cb4-57" tabindex="-1"></a>  csvs <span class="ot">&lt;-</span> furrr<span class="sc">::</span><span class="fu">future_map2_chr</span>(<span class="at">.x =</span> zip_results<span class="sc">$</span>path,</span>
+<span id="cb4-58"><a href="pls-data.html#cb4-58" tabindex="-1"></a>                                 <span class="at">.y =</span> zip_results<span class="sc">$</span>response,</span>
+<span id="cb4-59"><a href="pls-data.html#cb4-59" tabindex="-1"></a>                                 <span class="at">.f =</span> get_pls_csv,</span>
+<span id="cb4-60"><a href="pls-data.html#cb4-60" tabindex="-1"></a>                                 <span class="at">fy =</span> fy, <span class="at">here =</span> here)</span>
+<span id="cb4-61"><a href="pls-data.html#cb4-61" tabindex="-1"></a>  <span class="co"># Clean up</span></span>
+<span id="cb4-62"><a href="pls-data.html#cb4-62" tabindex="-1"></a>  process_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> fp, <span class="at">full.names =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-63"><a href="pls-data.html#cb4-63" tabindex="-1"></a>    <span class="fu">setdiff</span>(zipfile) <span class="co">#Get everything but the original zip</span></span>
+<span id="cb4-64"><a href="pls-data.html#cb4-64" tabindex="-1"></a>  <span class="fu">unlink</span>(process_files, <span class="at">recursive =</span> <span class="cn">TRUE</span>) <span class="co">#Delete</span></span>
+<span id="cb4-65"><a href="pls-data.html#cb4-65" tabindex="-1"></a>  csvs <span class="co">#return paths to created files</span></span>
+<span id="cb4-66"><a href="pls-data.html#cb4-66" tabindex="-1"></a>}</span>
+<span id="cb4-67"><a href="pls-data.html#cb4-67" tabindex="-1"></a></span>
+<span id="cb4-68"><a href="pls-data.html#cb4-68" tabindex="-1"></a><span class="co">#&#39; Use list of PLS URLs</span></span>
+<span id="cb4-69"><a href="pls-data.html#cb4-69" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-70"><a href="pls-data.html#cb4-70" tabindex="-1"></a><span class="co">#&#39; @param pls Character vector of PLS URLs (see `get_pls_urls()`); expects to find names in `fy20..` format also.</span></span>
+<span id="cb4-71"><a href="pls-data.html#cb4-71" tabindex="-1"></a><span class="co">#&#39; @param extract Fallback regex to get the names described above.</span></span>
+<span id="cb4-72"><a href="pls-data.html#cb4-72" tabindex="-1"></a><span class="co">#&#39; @param here String describing the intended destination path. Default `&#39;data/raw/PLS_csvs&#39;`. Needs refinement as a feature.</span></span>
+<span id="cb4-73"><a href="pls-data.html#cb4-73" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-74"><a href="pls-data.html#cb4-74" tabindex="-1"></a><span class="co">#&#39; @return Returns a list of the filenames being produced.</span></span>
+<span id="cb4-75"><a href="pls-data.html#cb4-75" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb4-76"><a href="pls-data.html#cb4-76" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb4-77"><a href="pls-data.html#cb4-77" tabindex="-1"></a>get_pls_data <span class="ot">&lt;-</span> \(pls,</span>
+<span id="cb4-78"><a href="pls-data.html#cb4-78" tabindex="-1"></a>                  <span class="at">extract =</span> <span class="st">&#39;fy20..&#39;</span>,</span>
+<span id="cb4-79"><a href="pls-data.html#cb4-79" tabindex="-1"></a>                  <span class="at">here =</span> <span class="st">&#39;data/raw/PLS_csvs&#39;</span>) {</span>
+<span id="cb4-80"><a href="pls-data.html#cb4-80" tabindex="-1"></a>  files <span class="ot">&lt;-</span> furrr<span class="sc">::</span><span class="fu">future_map</span>(<span class="at">.x =</span> pls, <span class="at">.f =</span> get_pls_data,</span>
+<span id="cb4-81"><a href="pls-data.html#cb4-81" tabindex="-1"></a>                             <span class="at">extract =</span> extract, <span class="at">here =</span> here)</span>
+<span id="cb4-82"><a href="pls-data.html#cb4-82" tabindex="-1"></a>}</span></code></pre></div>
 <p>The utility functions <code>check_nrow</code> and <code>check_nrows</code> were custom (in <code>R/utils.R</code>):</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="pls-data.html#cb29-1" tabindex="-1"></a><span class="co">#&#39; Number of rows in a fread-legible file</span></span>
-<span id="cb29-2"><a href="pls-data.html#cb29-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-3"><a href="pls-data.html#cb29-3" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
-<span id="cb29-4"><a href="pls-data.html#cb29-4" tabindex="-1"></a><span class="co">#&#39; Uses `data.table::fread()` to determine `nrow` for a file without actually loading all of its contents.</span></span>
-<span id="cb29-5"><a href="pls-data.html#cb29-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-6"><a href="pls-data.html#cb29-6" tabindex="-1"></a><span class="co">#&#39; @param file Path to the file being evaluated.</span></span>
-<span id="cb29-7"><a href="pls-data.html#cb29-7" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-8"><a href="pls-data.html#cb29-8" tabindex="-1"></a><span class="co">#&#39; @returns Returns an integer `nrow` value.</span></span>
-<span id="cb29-9"><a href="pls-data.html#cb29-9" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb29-10"><a href="pls-data.html#cb29-10" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-11"><a href="pls-data.html#cb29-11" tabindex="-1"></a>check_nrow <span class="ot">&lt;-</span> \(<span class="at">file =</span> filename) {</span>
-<span id="cb29-12"><a href="pls-data.html#cb29-12" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(file) <span class="co">#check filename</span></span>
-<span id="cb29-13"><a href="pls-data.html#cb29-13" tabindex="-1"></a>  n <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="at">file =</span> file, <span class="at">select =</span> 1L) <span class="sc">%&gt;%</span></span>
-<span id="cb29-14"><a href="pls-data.html#cb29-14" tabindex="-1"></a>    <span class="fu">nrow</span>()</span>
-<span id="cb29-15"><a href="pls-data.html#cb29-15" tabindex="-1"></a>}</span>
-<span id="cb29-16"><a href="pls-data.html#cb29-16" tabindex="-1"></a></span>
-<span id="cb29-17"><a href="pls-data.html#cb29-17" tabindex="-1"></a><span class="co">#&#39; Vectorized `check_nrow()`</span></span>
-<span id="cb29-18"><a href="pls-data.html#cb29-18" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-19"><a href="pls-data.html#cb29-19" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
-<span id="cb29-20"><a href="pls-data.html#cb29-20" tabindex="-1"></a><span class="co">#&#39; Uses `data.table::fread()` to determine `nrow` for multiple files without actually loading their contents. Returns a vector of results in the original order.</span></span>
-<span id="cb29-21"><a href="pls-data.html#cb29-21" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-22"><a href="pls-data.html#cb29-22" tabindex="-1"></a><span class="co">#&#39; @param files Character vector of one or more file paths. (If it&#39;s only one, you should probably be using `check_nrow()` on its own.)</span></span>
-<span id="cb29-23"><a href="pls-data.html#cb29-23" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-24"><a href="pls-data.html#cb29-24" tabindex="-1"></a><span class="co">#&#39; @returns Returns an integer vector corresponding to the `nrow` results in order.</span></span>
-<span id="cb29-25"><a href="pls-data.html#cb29-25" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb29-26"><a href="pls-data.html#cb29-26" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb29-27"><a href="pls-data.html#cb29-27" tabindex="-1"></a>check_nrows <span class="ot">&lt;-</span> \(<span class="at">files =</span> <span class="fu">c</span>()) {</span>
-<span id="cb29-28"><a href="pls-data.html#cb29-28" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">assert_that</span>(<span class="fu">is.vector</span>(files, <span class="at">mode =</span> <span class="st">&#39;character&#39;</span>))</span>
-<span id="cb29-29"><a href="pls-data.html#cb29-29" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> furrr<span class="sc">::</span><span class="fu">future_map_int</span>(<span class="at">.x =</span> files, <span class="at">.f =</span> check_nrow)</span>
-<span id="cb29-30"><a href="pls-data.html#cb29-30" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="pls-data.html#cb5-1" tabindex="-1"></a><span class="co">#&#39; Number of rows in a fread-legible file</span></span>
+<span id="cb5-2"><a href="pls-data.html#cb5-2" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-3"><a href="pls-data.html#cb5-3" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
+<span id="cb5-4"><a href="pls-data.html#cb5-4" tabindex="-1"></a><span class="co">#&#39; Uses `data.table::fread()` to determine `nrow` for a file without actually loading all of its contents.</span></span>
+<span id="cb5-5"><a href="pls-data.html#cb5-5" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-6"><a href="pls-data.html#cb5-6" tabindex="-1"></a><span class="co">#&#39; @param file Path to the file being evaluated.</span></span>
+<span id="cb5-7"><a href="pls-data.html#cb5-7" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-8"><a href="pls-data.html#cb5-8" tabindex="-1"></a><span class="co">#&#39; @returns Returns an integer `nrow` value.</span></span>
+<span id="cb5-9"><a href="pls-data.html#cb5-9" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb5-10"><a href="pls-data.html#cb5-10" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-11"><a href="pls-data.html#cb5-11" tabindex="-1"></a>check_nrow <span class="ot">&lt;-</span> \(<span class="at">file =</span> filename) {</span>
+<span id="cb5-12"><a href="pls-data.html#cb5-12" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">is.readable</span>(file) <span class="co">#check filename</span></span>
+<span id="cb5-13"><a href="pls-data.html#cb5-13" tabindex="-1"></a>  n <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="at">file =</span> file, <span class="at">select =</span> 1L) <span class="sc">%&gt;%</span></span>
+<span id="cb5-14"><a href="pls-data.html#cb5-14" tabindex="-1"></a>    <span class="fu">nrow</span>()</span>
+<span id="cb5-15"><a href="pls-data.html#cb5-15" tabindex="-1"></a>}</span>
+<span id="cb5-16"><a href="pls-data.html#cb5-16" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="pls-data.html#cb5-17" tabindex="-1"></a><span class="co">#&#39; Vectorized `check_nrow()`</span></span>
+<span id="cb5-18"><a href="pls-data.html#cb5-18" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-19"><a href="pls-data.html#cb5-19" tabindex="-1"></a><span class="co">#&#39; @description</span></span>
+<span id="cb5-20"><a href="pls-data.html#cb5-20" tabindex="-1"></a><span class="co">#&#39; Uses `data.table::fread()` to determine `nrow` for multiple files without actually loading their contents. Returns a vector of results in the original order.</span></span>
+<span id="cb5-21"><a href="pls-data.html#cb5-21" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-22"><a href="pls-data.html#cb5-22" tabindex="-1"></a><span class="co">#&#39; @param files Character vector of one or more file paths. (If it&#39;s only one, you should probably be using `check_nrow()` on its own.)</span></span>
+<span id="cb5-23"><a href="pls-data.html#cb5-23" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-24"><a href="pls-data.html#cb5-24" tabindex="-1"></a><span class="co">#&#39; @returns Returns an integer vector corresponding to the `nrow` results in order.</span></span>
+<span id="cb5-25"><a href="pls-data.html#cb5-25" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb5-26"><a href="pls-data.html#cb5-26" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb5-27"><a href="pls-data.html#cb5-27" tabindex="-1"></a>check_nrows <span class="ot">&lt;-</span> \(<span class="at">files =</span> <span class="fu">c</span>()) {</span>
+<span id="cb5-28"><a href="pls-data.html#cb5-28" tabindex="-1"></a>  assertthat<span class="sc">::</span><span class="fu">assert_that</span>(<span class="fu">is.vector</span>(files, <span class="at">mode =</span> <span class="st">&#39;character&#39;</span>))</span>
+<span id="cb5-29"><a href="pls-data.html#cb5-29" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> furrr<span class="sc">::</span><span class="fu">future_map_int</span>(<span class="at">.x =</span> files, <span class="at">.f =</span> check_nrow)</span>
+<span id="cb5-30"><a href="pls-data.html#cb5-30" tabindex="-1"></a>}</span></code></pre></div>
 
 </div>
 </div>
