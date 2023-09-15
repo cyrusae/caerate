@@ -44,15 +44,14 @@ The biggest unfinished project was sparked by the realization that I wasn't comf
 
 Following sections will explain some of the immediately-usable code.
 
-```{r setup}
+```{r setup, collapse=TRUE}
 require(curl) #better downloads
 require(data.table) #big data wrangling
 require(magrittr) #use the pipe
 require(stringr) #wrangle strings
 require(assertthat) #enforce expected outputs
 require(here) #file path management (for now; rprojroot preferable)
-require(withr) #tempdir management; could also switch to withr pipe
-require(dplyr) #binding rows 
-### replace with poorman!
+require(withr) #tempdir management; could also switch to withr pipe to reduce dependencies, though.
+require(dplyr) #binding rows ### replace with poorman!!
 require(furrr) #simultaneity
 ```
