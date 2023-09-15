@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Logic | PLS/E-Rate wrangling overview</title>
+  <meta name="description" content="2 Logic | PLS/E-Rate wrangling overview" />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Logic | PLS/E-Rate wrangling overview" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Logic | PLS/E-Rate wrangling overview" />
+  
+  
+  
+
+<meta name="author" content="Cyrus Eosphoros" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="pls-data.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About this document</a></li>
+<li class="chapter" data-level="2" data-path="logic.html"><a href="logic.html"><i class="fa fa-check"></i><b>2</b> Logic</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="logic.html"><a href="logic.html#contents"><i class="fa fa-check"></i><b>2.1</b> Contents</a></li>
+<li class="chapter" data-level="2.2" data-path="logic.html"><a href="logic.html#back-up-a-second"><i class="fa fa-check"></i><b>2.2</b> Back up a second</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="logic.html"><a href="logic.html#second-guessing"><i class="fa fa-check"></i><b>2.2.1</b> Second-guessing</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="logic.html"><a href="logic.html#important-things-to-know"><i class="fa fa-check"></i><b>2.3</b> Important things to know</a></li>
+<li class="chapter" data-level="2.4" data-path="logic.html"><a href="logic.html#so-packages"><i class="fa fa-check"></i><b>2.4</b> So: packages</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="pls-data.html"><a href="pls-data.html"><i class="fa fa-check"></i><b>3</b> PLS data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="pls-data.html"><a href="pls-data.html#some-libraries-here-and-why-to-use-them"><i class="fa fa-check"></i><b>3.1</b> Some libraries here and why to use them</a></li>
+<li class="chapter" data-level="3.2" data-path="pls-data.html"><a href="pls-data.html#pls-download-and-cleaning-utilities"><i class="fa fa-check"></i><b>3.2</b> PLS download and cleaning utilities</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="e-rate-data.html"><a href="e-rate-data.html"><i class="fa fa-check"></i><b>4</b> E-Rate data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="e-rate-data.html"><a href="e-rate-data.html#socrata-and-performance"><i class="fa fa-check"></i><b>4.1</b> Socrata and performance</a></li>
+<li class="chapter" data-level="4.2" data-path="e-rate-data.html"><a href="e-rate-data.html#why-is-all-of-the-above-important"><i class="fa fa-check"></i><b>4.2</b> Why is all of the above important?</a></li>
+<li class="chapter" data-level="4.3" data-path="e-rate-data.html"><a href="e-rate-data.html#what-next"><i class="fa fa-check"></i><b>4.3</b> What next?</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="architecture.html"><a href="architecture.html"><i class="fa fa-check"></i><b>5</b> Architecture</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="architecture.html"><a href="architecture.html#second-drafts"><i class="fa fa-check"></i><b>5.1</b> Second drafts</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">PLS/E-Rate wrangling overview</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="logic" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Logic<a href="logic.html#logic" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="contents" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Contents<a href="logic.html#contents" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The original working code I have to date was formatted as an R package. This is inspired by an encounter with <a href="https://mdneuzerling.com/post/data-science-workflows/">David Neuzerling’s arguments for package-driven development in data science</a>.</p>
+<p>The main point of appeal for me here is portability–I wanted to be able to
+hand it off to other people with minimal preparation. Ideally, <code>devtools</code> would allow for installing the entire thing from GitHub instead of sending scripts around, e.g. on the actual server.</p>
+</div>
+<div id="back-up-a-second" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Back up a second<a href="logic.html#back-up-a-second" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>At the time I’m writing this TASCHA’s scripts run on AWS (specifically, on a Linux EC2 instance). This is not directly comparable to the laptop I work on even if I do have a Linux server locally. One of my goals has been minimizing the extent to which that is noticeable.</p>
+<p>Couple key points for the data engineering/data science intersection that’s been happening here:</p>
+<ol style="list-style-type: decimal">
+<li>From my perspective this has been an <strong>ETL pipeline</strong> problem. ETL stands for Extract/Transform/Load. It’s a very generalized way of describing the idea of a process that pulls data from one or more sources, cleans/structures/munges/otherwise changes it to be more usable for the entity doing the pulling, and puts it (the structured data) somewhere for safekeeping.</li>
+<li>The iSchool brought in Informatics students last year to make a <strong>data warehouse</strong>: a structured database for this data so it doesn’t have to live in CSVs or be computed on the fly. (UW custom/convenience means that the null hypothesis is for that database to be built in <em>Microsoft SQL Server</em>, but that’s not hugely relevant to this document.)</li>
+</ol>
+<p>Problem: in order to do the second thing, one must first have structured data to work with. I have been focused on step one for the duration.</p>
+<div id="second-guessing" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Second-guessing<a href="logic.html#second-guessing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One project-level note: what I eventually concluded was that it would’ve been ideal to come at this from two sides at the same time–make a temporary warehouse for the data TASCHA has now so that it’s more accessible for less computing overhead, <em>and</em> improve the overall pipeline process. This is, for logistical and division of labor reasons, not what I started off doing. It is what I would recommend and/or attempt to do now, given either time travel abilities or the ability to keep working on it.</p>
+</div>
+</div>
+<div id="important-things-to-know" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Important things to know<a href="logic.html#important-things-to-know" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recurring theme of things that we want to know whenever we’re dealing with data from my perspective:</p>
+<ul>
+<li>Are there unique identifiers for some kind of entity that aren’t dependent on human error? Where do they live?</li>
+<li>What values are NA in disguise?</li>
+<li>Are there fields that are many repetitions of a small number of repeating values?</li>
+</ul>
+<p>SQL is much stricter about data type and cleaning than R. Both R and SQL are good at filtering large amounts of data based on a single unique identifier if you can dig one up.</p>
+</div>
+<div id="so-packages" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> So: packages<a href="logic.html#so-packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>My work to date has been in a package I called <code>HideousLaughter</code> (it’s a Dungeons &amp; Dragons pun). The IMLS doesn’t provide a public API for the PLS data so the first thing I wanted to do was have an automated–so self-replicating–way to download the PLS result files so they’d be the same every time.</p>
+<p>Existing code also contains faster E-Rate downloading.</p>
+<p>The biggest unfinished project was sparked by the realization that I wasn’t comfortable making anyone depend on me (human, can misread things) transcribing metadata about hundreds of columns if there were places I could automate R doing it for me. The resulting flat file helper tool is always going to have some TASCHA genes from my perspective and will be available for anyone/everyone once it exists whether or not I’m here.</p>
+<p><a href="https://github.com/cyrusae/HideousLaughter">Here is the entire package on GitHub</a>. It is very much a “work-in-progress scratchpad” kind of situation. To the point where you could check out <code>/inst</code> for progress reports/trial and error/notes (and the <code>summer</code> branch for variations). Ideally you won’t have to.</p>
+<p>Following sections will explain some of the immediately-usable code.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="logic.html#cb1-1" tabindex="-1"></a><span class="fu">require</span>(curl) <span class="co">#better downloads</span></span></code></pre></div>
+<pre><code>## Loading required package: curl</code></pre>
+<pre><code>## Using libcurl 7.81.0 with OpenSSL/3.0.2</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="logic.html#cb4-1" tabindex="-1"></a><span class="fu">require</span>(data.table) <span class="co">#big data wrangling</span></span></code></pre></div>
+<pre><code>## Loading required package: data.table</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="logic.html#cb6-1" tabindex="-1"></a><span class="fu">require</span>(magrittr) <span class="co">#use the pipe</span></span></code></pre></div>
+<pre><code>## Loading required package: magrittr</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="logic.html#cb8-1" tabindex="-1"></a><span class="fu">require</span>(stringr) <span class="co">#wrangle strings</span></span></code></pre></div>
+<pre><code>## Loading required package: stringr</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="logic.html#cb10-1" tabindex="-1"></a><span class="fu">require</span>(assertthat) <span class="co">#enforce expected outputs</span></span></code></pre></div>
+<pre><code>## Loading required package: assertthat</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="logic.html#cb12-1" tabindex="-1"></a><span class="fu">require</span>(here) <span class="co">#file path management (for now; rprojroot preferable)</span></span></code></pre></div>
+<pre><code>## Loading required package: here</code></pre>
+<pre><code>## here() starts at /home/watcher/GitHere/caerate</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="logic.html#cb15-1" tabindex="-1"></a><span class="fu">require</span>(withr) <span class="co">#tempdir management; could also switch to withr pipe</span></span></code></pre></div>
+<pre><code>## Loading required package: withr</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="logic.html#cb17-1" tabindex="-1"></a><span class="fu">require</span>(dplyr) <span class="co">#binding rows </span></span></code></pre></div>
+<pre><code>## Loading required package: dplyr</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:data.table&#39;:
+## 
+##     between, first, last</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="logic.html#cb23-1" tabindex="-1"></a><span class="do">### replace with poorman!</span></span>
+<span id="cb23-2"><a href="logic.html#cb23-2" tabindex="-1"></a><span class="fu">require</span>(furrr) <span class="co">#simultaneity</span></span></code></pre></div>
+<pre><code>## Loading required package: furrr</code></pre>
+<pre><code>## Loading required package: future</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pls-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

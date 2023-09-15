@@ -1,0 +1,66 @@
+# E-Rate data
+
+The most important thing I can tell you about USAC's E-Rate data is this: what they refer to as a BEN (Billed Entity Number) is a unique identifier used for both administrative entities and beneficiaries. One library/system/etc. might acquire *more than one* BEN because someone responsible for filing the paperwork forgot theirs, but they are never reassigned. This liberates us from human typos if we play our cards right.
+
+The second most important thing I can tell you is that if you approach the data by way of the right dataset NIFs don't seem to matter. (This is somewhat inside baseball; the purpose of it being laid out in this document is to explain to existing TASCHA folks what can change, not what NIFs are and why they're a problem.)
+
+## Socrata and performance
+
+USAC uses Socrata for their open data APIs. Socrata has an R package. Socrata's R package's performance, benchmark-wise, is... bad. It's really bad.
+
+The good news is, in the time since the original E-Rate dashboard, they changed their rate-limiting so that the staggered loops in the original download script aren't necessary. (I also have never in my life been able to get USAC to recognize an app token in a request, but the good news is I've never when testing this sent it enough requests at once to need to.)
+
+Requests to the USAC API now allow arbitrary row limits but you do have to specify something--there's not a parameter that lets you select infinite ones. You will be seeing a lot of `$limit=1000000000` for getting around that on my part.
+
+**Important note:** from everything I could verify in the E-Rate data, all libraries apply for funding as either "Library" or "Library System". Both of those are characteristics that can be filtered for in the first request.
+
+I used the C2 budget tool data to verify this. The general strategy here is to start with the smallest possible dataset that might have unique identifiers we want and use that to filter everything else as aggressively as possible.
+
+Here is the verification:
+
+```{r}
+#test filtering by url
+libraries <- 'https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library&$limit=100000000'
+lib_test <- curl::curl_download(url = libraries,
+                                destfile = 'libtest.csv')
+fread(file = lib_test)
+#verified: this retrieves 4,347 results and USAC site expects the same.
+
+lib_sys_test <- curl::curl_download('https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library%20System&$limit=1000000000', destfile = 'systest.csv')
+fread(file = lib_sys_test)
+#retrieves 1,448 library systems
+#USAC site browser also currently expects 1,448 library systems
+```
+
+This is the approach I used to download "Library" and "Library System" data separately and then bind them together:
+
+```{r}
+curl::curl_download(url = 'https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library&$limit=1000000000',
+                      destfile = 'lib.csv')
+curl::curl_download(url = 'https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library%20System&$limit=1000000000',
+                      destfile = 'sys.csv')
+lib <- data.table::fread(file = 'lib.csv')
+sys <- data.table::fread(file = 'sys.csv')
+assertthat::are_equal(names(lib), names(sys)) #check that columns match 
+libsys <- dplyr::bind_rows(lib, sys)
+assertthat::are_equal((nrow(lib) + nrow(sys)),
+                      nrow(libsys)) #check that the combined table contains rows from each 
+```
+
+Note: `dplyr` is, for lack of a better word, a very "heavy" package to use for a single `bind_rows`. It can be substituted with the drop-in replacement `poorman`, which I strongly recommend.
+
+## Why is all of the above important?
+
+1. We can identify libraries and library systems without depending on regex matching.
+2. Libraries and library systems have permanent identities on the USAC side. 
+3. Looping over a subset of the USAC data is no longer necessary.
+
+Basically everything I do when filtering data ends up depending on `data.table` joins. [Here is that package's documentation](https://rdatatable.gitlab.io/data.table/articles/datatable-intro.html). It follows the same underlying logic as an SQL database when matching on key columns--which is a way of taking a shortcut past "searching" per se. (Think of it like overlapping stencils?)
+
+## What next?
+
+USAC uses the same unique keys across different datasets (e.g., BENs), but the column names vary; that's something that requires human intervention to identify fully. But as soon as we have a list of the keys we're interested in (e.g., the BEN for every entry in the C2 budget data that has to do with libraries), we can use those to filter down other datasets.
+
+The approach you would want would be downloading the entirety of a specific dataset of interest (`curl` to get a CSV and then `data.table::fread` is faster than streaming the data and means no surprises as far as how R interprets the data) and immediately filtering it down to only rows that include identities we know we care about (above).
+
+Repeat this process/logic to, e.g., find all applications that are funding a library, then find only line numbers for those applications. That's the rest of what I was aiming for here.

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 E-Rate data | PLS/E-Rate wrangling overview</title>
+  <meta name="description" content="4 E-Rate data | PLS/E-Rate wrangling overview" />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 E-Rate data | PLS/E-Rate wrangling overview" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 E-Rate data | PLS/E-Rate wrangling overview" />
+  
+  
+  
+
+<meta name="author" content="Cyrus Eosphoros" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="pls-data.html"/>
+<link rel="next" href="architecture.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About this document</a></li>
+<li class="chapter" data-level="2" data-path="logic.html"><a href="logic.html"><i class="fa fa-check"></i><b>2</b> Logic</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="logic.html"><a href="logic.html#contents"><i class="fa fa-check"></i><b>2.1</b> Contents</a></li>
+<li class="chapter" data-level="2.2" data-path="logic.html"><a href="logic.html#back-up-a-second"><i class="fa fa-check"></i><b>2.2</b> Back up a second</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="logic.html"><a href="logic.html#second-guessing"><i class="fa fa-check"></i><b>2.2.1</b> Second-guessing</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="logic.html"><a href="logic.html#important-things-to-know"><i class="fa fa-check"></i><b>2.3</b> Important things to know</a></li>
+<li class="chapter" data-level="2.4" data-path="logic.html"><a href="logic.html#so-packages"><i class="fa fa-check"></i><b>2.4</b> So: packages</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="pls-data.html"><a href="pls-data.html"><i class="fa fa-check"></i><b>3</b> PLS data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="pls-data.html"><a href="pls-data.html#some-libraries-here-and-why-to-use-them"><i class="fa fa-check"></i><b>3.1</b> Some libraries here and why to use them</a></li>
+<li class="chapter" data-level="3.2" data-path="pls-data.html"><a href="pls-data.html#pls-download-and-cleaning-utilities"><i class="fa fa-check"></i><b>3.2</b> PLS download and cleaning utilities</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="e-rate-data.html"><a href="e-rate-data.html"><i class="fa fa-check"></i><b>4</b> E-Rate data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="e-rate-data.html"><a href="e-rate-data.html#socrata-and-performance"><i class="fa fa-check"></i><b>4.1</b> Socrata and performance</a></li>
+<li class="chapter" data-level="4.2" data-path="e-rate-data.html"><a href="e-rate-data.html#why-is-all-of-the-above-important"><i class="fa fa-check"></i><b>4.2</b> Why is all of the above important?</a></li>
+<li class="chapter" data-level="4.3" data-path="e-rate-data.html"><a href="e-rate-data.html#what-next"><i class="fa fa-check"></i><b>4.3</b> What next?</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="architecture.html"><a href="architecture.html"><i class="fa fa-check"></i><b>5</b> Architecture</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="architecture.html"><a href="architecture.html#second-drafts"><i class="fa fa-check"></i><b>5.1</b> Second drafts</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">PLS/E-Rate wrangling overview</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="e-rate-data" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> E-Rate data<a href="e-rate-data.html#e-rate-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The most important thing I can tell you about USAC’s E-Rate data is this: what they refer to as a BEN (Billed Entity Number) is a unique identifier used for both administrative entities and beneficiaries. One library/system/etc. might acquire <em>more than one</em> BEN because someone responsible for filing the paperwork forgot theirs, but they are never reassigned. This liberates us from human typos if we play our cards right.</p>
+<p>The second most important thing I can tell you is that if you approach the data by way of the right dataset NIFs don’t seem to matter. (This is somewhat inside baseball; the purpose of it being laid out in this document is to explain to existing TASCHA folks what can change, not what NIFs are and why they’re a problem.)</p>
+<div id="socrata-and-performance" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Socrata and performance<a href="e-rate-data.html#socrata-and-performance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>USAC uses Socrata for their open data APIs. Socrata has an R package. Socrata’s R package’s performance, benchmark-wise, is… bad. It’s really bad.</p>
+<p>The good news is, in the time since the original E-Rate dashboard, they changed their rate-limiting so that the staggered loops in the original download script aren’t necessary. (I also have never in my life been able to get USAC to recognize an app token in a request, but the good news is I’ve never when testing this sent it enough requests at once to need to.)</p>
+<p>Requests to the USAC API now allow arbitrary row limits but you do have to specify something–there’s not a parameter that lets you select infinite ones. You will be seeing a lot of <code>$limit=1000000000</code> for getting around that on my part.</p>
+<p><strong>Important note:</strong> from everything I could verify in the E-Rate data, all libraries apply for funding as either “Library” or “Library System”. Both of those are characteristics that can be filtered for in the first request.</p>
+<p>I used the C2 budget tool data to verify this. The general strategy here is to start with the smallest possible dataset that might have unique identifiers we want and use that to filter everything else as aggressively as possible.</p>
+<p>Here is the verification:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="e-rate-data.html#cb30-1" tabindex="-1"></a><span class="co">#test filtering by url</span></span>
+<span id="cb30-2"><a href="e-rate-data.html#cb30-2" tabindex="-1"></a>libraries <span class="ot">&lt;-</span> <span class="st">&#39;https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library&amp;$limit=100000000&#39;</span></span>
+<span id="cb30-3"><a href="e-rate-data.html#cb30-3" tabindex="-1"></a>lib_test <span class="ot">&lt;-</span> curl<span class="sc">::</span><span class="fu">curl_download</span>(<span class="at">url =</span> libraries,</span>
+<span id="cb30-4"><a href="e-rate-data.html#cb30-4" tabindex="-1"></a>                                <span class="at">destfile =</span> <span class="st">&#39;libtest.csv&#39;</span>)</span>
+<span id="cb30-5"><a href="e-rate-data.html#cb30-5" tabindex="-1"></a><span class="fu">fread</span>(<span class="at">file =</span> lib_test)</span></code></pre></div>
+<pre><code>##            ben                            billed_entity_name           city
+##    1:   125597                       HASTINGS PUBLIC LIBRARY       HASTINGS
+##    2:   125848                    THOMAS BEAVER FREE LIBRARY       DANVILLE
+##    3:   124826                NORTH TONAWANDA PUBLIC LIBRARY    N TONAWANDA
+##    4:   158659            JOHN B. CURTIS FREE PUBLIC LIBRARY       BRADFORD
+##    5: 17029547    BLUE LAKE RANCHERIA SYLVIA DANIELS LIBRARY      BLUE LAKE
+##   ---                                                                      
+## 4354:    71374 NORTH SUBURBAN PUBLIC LIBRARY DISTRICT ROSCOE         ROSCOE
+## 4355:   145632                       DELTA COMMUNITY LIBRARY DELTA JUNCTION
+## 4356:   125701               JOSEPH T SIMPSON PUBLIC LIBRARY  MECHANICSBURG
+## 4357:   120709                      ATTLEBORO PUBLIC LIBRARY      ATTLEBORO
+## 4358:   145570                     KENNY LAKE PUBLIC LIBRARY  COPPER CENTER
+##       state applicant_type
+##    1:    PA        Library
+##    2:    PA        Library
+##    3:    NY        Library
+##    4:    ME        Library
+##    5:    CA        Library
+##   ---                     
+## 4354:    IL        Library
+## 4355:    AK        Library
+## 4356:    PA        Library
+## 4357:    MA        Library
+## 4358:    AK        Library
+##                                                    consulting_firm_name_crn
+##    1:                                                                      
+##    2:                                      TL TECH Services, LLC (17033105)
+##    3:                                                                      
+##    4:                                                                      
+##    5:                                                                      
+##   ---                                                                      
+## 4354:    E-Rate Central (16060891); E-Rate Funding Solutions LLC (16070846)
+## 4355: DeAnne Rand, E-Rate Coordinator (17018547); Valerie Oliver (17002356)
+## 4356:                                                                      
+## 4357:                             B&amp;R Erate Consulting Services  (17028255)
+## 4358: DeAnne Rand, E-Rate Coordinator (17018547); Valerie Oliver (17002356)
+##       c2_budget_cycle child_entity_count c2_budget_algorithm full_time_students
+##    1:     FY2021-2025                  0 Independent Library                 NA
+##    2:     FY2021-2025                  0 Independent Library                 NA
+##    3:     FY2021-2025                  0 Independent Library                 NA
+##    4:     FY2021-2025                  0 Independent Library                 NA
+##    5:     FY2021-2025                  0 Independent Library                 NA
+##   ---                                                                          
+## 4354:     FY2021-2025                  0 Independent Library                 NA
+## 4355:     FY2021-2025                  0 Independent Library                 NA
+## 4356:     FY2021-2025                  0 Independent Library                 NA
+## 4357:     FY2021-2025                  0 Independent Library                 NA
+## 4358:     FY2021-2025                  0 Independent Library                 NA
+##       library_square_footage school_student_multiplier library_multiplier
+##    1:                   2187                        NA                4.5
+##    2:                   8137                        NA                4.5
+##    3:                  26500                        NA                4.5
+##    4:                   1000                        NA                4.5
+##    5:                    200                        NA                4.5
+##   ---                                                                    
+## 4354:                  22090                        NA                4.5
+## 4355:                   5000                        NA                4.5
+## 4356:                  16800                        NA                4.5
+## 4357:                  37000                        NA                4.5
+## 4358:                   1440                        NA                4.5
+##       c2_budget c2_budget_version funded_c2_budget_amount
+##    1:   25000.0          Forecast                    0.00
+##    2:   36616.5          Forecast                    0.00
+##    3:  119250.0          Forecast                    0.00
+##    4:   25000.0          Forecast                    0.00
+##    5:   25000.0          Forecast                    0.00
+##   ---                                                    
+## 4354:   99405.0         Confirmed                83287.81
+## 4355:   25000.0         Confirmed                 8370.84
+## 4356:   75600.0         Confirmed                 3476.85
+## 4357:  166500.0         Confirmed                50325.92
+## 4358:   25000.0         Confirmed                 1680.00
+##       pending_c2_budget_amount available_c2_budget_amount
+##    1:                        0                   25000.00
+##    2:                        0                   36616.50
+##    3:                        0                  119250.00
+##    4:                        0                   25000.00
+##    5:                        0                   25000.00
+##   ---                                                    
+## 4354:                        0                   16117.19
+## 4355:                        0                   16629.16
+## 4356:                        0                   72123.15
+## 4357:                        0                  116174.08
+## 4358:                        0                   23320.00</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="e-rate-data.html#cb32-1" tabindex="-1"></a><span class="co">#verified: this retrieves 4,347 results and USAC site expects the same.</span></span>
+<span id="cb32-2"><a href="e-rate-data.html#cb32-2" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="e-rate-data.html#cb32-3" tabindex="-1"></a>lib_sys_test <span class="ot">&lt;-</span> curl<span class="sc">::</span><span class="fu">curl_download</span>(<span class="st">&#39;https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library%20System&amp;$limit=1000000000&#39;</span>, <span class="at">destfile =</span> <span class="st">&#39;systest.csv&#39;</span>)</span>
+<span id="cb32-4"><a href="e-rate-data.html#cb32-4" tabindex="-1"></a><span class="fu">fread</span>(<span class="at">file =</span> lib_sys_test)</span></code></pre></div>
+<pre><code>##            ben                            billed_entity_name        city state
+##    1: 16075292                    CLEARVIEW LIBRARY DISTRICT     WINDSOR    CO
+##    2:   142853                SAN JUAN COUNTY LIBRARY SYSTEM    BLANDING    UT
+##    3: 16062599                   CONTRA COSTA COUNTY LIBRARY    MARTINEZ    CA
+##    4:   128867               PENDLETON COUNTY PUBLIC LIBRARY    FALMOUTH    KY
+##    5:   129119                    WORTHINGTON PUBLIC LIBRARY WORTHINGTON    OH
+##   ---                                                                         
+## 1447:   225808 FORT BRANCH - JOHNSON TOWNSHIP PUBLIC LIBRARY FORT BRANCH    IN
+## 1448:   150949                 MASON COUNTY DISTRICT LIBRARY   LUDINGTON    MI
+## 1449: 17000364                    CENTRO DE SERVICIOS FERRÁN       PONCE    PR
+## 1450:   130432                      LA GRANGE COUNTY LIBRARY    LAGRANGE    IN
+## 1451:   128791         BATH COUNTY MEMORIAL LIBRARY DISTRICT OWINGSVILLE    KY
+##       applicant_type                                   consulting_firm_name_crn
+##    1: Library System                                                           
+##    2: Library System            UETN  NFP E-Rate Consulting Services (17028946)
+##    3: Library System                         EdTechnologyFunds, Inc. (16060507)
+##    4: Library System                                                           
+##    5: Library System Education Plus (16075832); OHIO E-RATE SERVICES (16062044)
+##   ---                                                                          
+## 1447: Library System   AdTec-Administrative and Technical Consulting (16024741)
+## 1448: Library System                                  Elite Fund Inc (16043589)
+## 1449: Library System                                                           
+## 1450: Library System   AdTec-Administrative and Technical Consulting (16024741)
+## 1451: Library System                                                           
+##       c2_budget_cycle child_entity_count
+##    1:     FY2021-2025                  1
+##    2:     FY2021-2025                  4
+##    3:     FY2021-2025                 27
+##    4:     FY2021-2025                  2
+##    5:     FY2021-2025                  5
+##   ---                                   
+## 1447:     FY2021-2025                  2
+## 1448:     FY2021-2025                  2
+## 1449:     FY2021-2025                  2
+## 1450:     FY2021-2025                  4
+## 1451:     FY2021-2025                  4
+##                                 c2_budget_algorithm full_time_students
+##    1:                 Per Site Basis Library System                 NA
+##    2: Library System Wide (Aggregate Funding Floor)                 NA
+##    3:                           Library System Wide                 NA
+##    4:                 Per Site Basis Library System                 NA
+##    5:                 Per Site Basis Library System                 NA
+##   ---                                                                 
+## 1447: Library System Wide (Aggregate Funding Floor)                 NA
+## 1448:                 Per Site Basis Library System                 NA
+## 1449: Library System Wide (Aggregate Funding Floor)                 NA
+## 1450:                 Per Site Basis Library System                 NA
+## 1451:                 Per Site Basis Library System                 NA
+##       library_square_footage school_student_multiplier library_multiplier
+##    1:                  17827                        NA                4.5
+##    2:                   1350                        NA                4.5
+##    3:                 372309                        NA                4.5
+##    4:                  13770                        NA                4.5
+##    5:                  82854                        NA                4.5
+##   ---                                                                    
+## 1447:                   5031                        NA                4.5
+## 1448:                  21228                        NA                4.5
+## 1449:                    850                        NA                4.5
+## 1450:                  44634                        NA                4.5
+## 1451:                  12309                        NA                4.5
+##       c2_budget c2_budget_version funded_c2_budget_amount
+##    1:   80221.5         Confirmed                21538.73
+##    2:   50000.0          Forecast                    0.00
+##    3: 1675390.5         Confirmed               512059.13
+##    4:   86650.0         Confirmed                12124.11
+##    5:  421731.5          Forecast                    0.00
+##   ---                                                    
+## 1447:   50000.0         Confirmed                26485.58
+## 1448:   95526.0         Confirmed                20789.60
+## 1449:   50000.0         Confirmed                11039.76
+## 1450:  211691.5         Confirmed                37254.31
+## 1451:  125517.0         Confirmed                34479.50
+##       pending_c2_budget_amount available_c2_budget_amount
+##    1:                  5782.15                   52900.62
+##    2:                     0.00                   50000.00
+##    3:                     0.00                 1163331.37
+##    4:                     0.00                   74525.89
+##    5:                     0.00                  421731.50
+##   ---                                                    
+## 1447:                     0.00                   23514.42
+## 1448:                     0.00                   74736.40
+## 1449:                     0.00                   38960.24
+## 1450:                     0.00                  174437.19
+## 1451:                     0.00                   91037.50</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="e-rate-data.html#cb34-1" tabindex="-1"></a><span class="co">#retrieves 1,448 library systems</span></span>
+<span id="cb34-2"><a href="e-rate-data.html#cb34-2" tabindex="-1"></a><span class="co">#USAC site browser also currently expects 1,448 library systems</span></span></code></pre></div>
+<p>This is the approach I used to download “Library” and “Library System” data separately and then bind them together:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="e-rate-data.html#cb35-1" tabindex="-1"></a>curl<span class="sc">::</span><span class="fu">curl_download</span>(<span class="at">url =</span> <span class="st">&#39;https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library&amp;$limit=1000000000&#39;</span>,</span>
+<span id="cb35-2"><a href="e-rate-data.html#cb35-2" tabindex="-1"></a>                      <span class="at">destfile =</span> <span class="st">&#39;lib.csv&#39;</span>)</span>
+<span id="cb35-3"><a href="e-rate-data.html#cb35-3" tabindex="-1"></a>curl<span class="sc">::</span><span class="fu">curl_download</span>(<span class="at">url =</span> <span class="st">&#39;https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library%20System&amp;$limit=1000000000&#39;</span>,</span>
+<span id="cb35-4"><a href="e-rate-data.html#cb35-4" tabindex="-1"></a>                      <span class="at">destfile =</span> <span class="st">&#39;sys.csv&#39;</span>)</span>
+<span id="cb35-5"><a href="e-rate-data.html#cb35-5" tabindex="-1"></a>lib <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="at">file =</span> <span class="st">&#39;lib.csv&#39;</span>)</span>
+<span id="cb35-6"><a href="e-rate-data.html#cb35-6" tabindex="-1"></a>sys <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="at">file =</span> <span class="st">&#39;sys.csv&#39;</span>)</span>
+<span id="cb35-7"><a href="e-rate-data.html#cb35-7" tabindex="-1"></a>assertthat<span class="sc">::</span><span class="fu">are_equal</span>(<span class="fu">names</span>(lib), <span class="fu">names</span>(sys)) <span class="co">#check that columns match </span></span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="e-rate-data.html#cb37-1" tabindex="-1"></a>libsys <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(lib, sys)</span>
+<span id="cb37-2"><a href="e-rate-data.html#cb37-2" tabindex="-1"></a>assertthat<span class="sc">::</span><span class="fu">are_equal</span>((<span class="fu">nrow</span>(lib) <span class="sc">+</span> <span class="fu">nrow</span>(sys)),</span>
+<span id="cb37-3"><a href="e-rate-data.html#cb37-3" tabindex="-1"></a>                      <span class="fu">nrow</span>(libsys)) <span class="co">#check that the combined table contains rows from each </span></span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Note: <code>dplyr</code> is, for lack of a better word, a very “heavy” package to use for a single <code>bind_rows</code>. It can be substituted with the drop-in replacement <code>poorman</code>, which I strongly recommend.</p>
+</div>
+<div id="why-is-all-of-the-above-important" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Why is all of the above important?<a href="e-rate-data.html#why-is-all-of-the-above-important" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>We can identify libraries and library systems without depending on regex matching.</li>
+<li>Libraries and library systems have permanent identities on the USAC side.</li>
+<li>Looping over a subset of the USAC data is no longer necessary.</li>
+</ol>
+<p>Basically everything I do when filtering data ends up depending on <code>data.table</code> joins. <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-intro.html">Here is that package’s documentation</a>. It follows the same underlying logic as an SQL database when matching on key columns–which is a way of taking a shortcut past “searching” per se. (Think of it like overlapping stencils?)</p>
+</div>
+<div id="what-next" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> What next?<a href="e-rate-data.html#what-next" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>USAC uses the same unique keys across different datasets (e.g., BENs), but the column names vary; that’s something that requires human intervention to identify fully. But as soon as we have a list of the keys we’re interested in (e.g., the BEN for every entry in the C2 budget data that has to do with libraries), we can use those to filter down other datasets.</p>
+<p>The approach you would want would be downloading the entirety of a specific dataset of interest (<code>curl</code> to get a CSV and then <code>data.table::fread</code> is faster than streaming the data and means no surprises as far as how R interprets the data) and immediately filtering it down to only rows that include identities we know we care about (above).</p>
+<p>Repeat this process/logic to, e.g., find all applications that are funding a library, then find only line numbers for those applications. That’s the rest of what I was aiming for here.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="pls-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="architecture.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
