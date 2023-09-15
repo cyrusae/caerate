@@ -21,5 +21,4 @@ It is written in a conversational style because that was more conducive to getti
 
 
 
-
 <!-- If you need PDF output, uncomment bookdown::pdf_book above in YAML. You will need a LaTeX installation, e.g., https://yihui.name/tinytex/ -->
