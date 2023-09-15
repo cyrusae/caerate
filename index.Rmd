@@ -1,6 +1,6 @@
 ---
-title: "A Book"
-author: "Frida Gomam"
+title: "PLS/E-Rate wrangling overview"
+author: "Cyrus Eosphoros"
 site: bookdown::bookdown_site
 documentclass: book
 output:
@@ -8,10 +8,18 @@ output:
   #bookdown::pdf_book: default
 ---
 
-# Hello World
+# About this document 
 
-Hi.
+This is a collection of notes and commented code that serves--or at least tries to serve--as an overview of the work I've done with TASCHA over the past year. This means there are several genres of topic being covered:
 
-Bye.
+- *data*, as in information about the nature of the PLS (Public Library Survey) and E-Rate data;
+- *tooling*, as in findings and suggestions for script-level changes and upgrades to the existing scripts;
+- *scripting*, as in features/code I have written and why;
+- *architecture*, plans for long-term development and explanations of why they're like that from my perspective 
+
+It is written in a conversational style because that was more conducive to getting more information down in place as opposed to less information. Thanks in advance for bearing with me on that front.
+
+
+
 
 <!-- If you need PDF output, uncomment bookdown::pdf_book above in YAML. You will need a LaTeX installation, e.g., https://yihui.name/tinytex/ -->
