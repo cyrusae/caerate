@@ -5,7 +5,6 @@ site: bookdown::bookdown_site
 documentclass: book
 output:
   bookdown::gitbook: default
-  output_dir: "docs"
   #bookdown::pdf_book: default
 ---
 
