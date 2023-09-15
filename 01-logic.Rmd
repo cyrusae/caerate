@@ -1,0 +1,58 @@
+# Logic
+
+## Contents
+
+The original working code I have to date was formatted as an R package. This is inspired by an encounter with [David Neuzerling's arguments for package-driven development in data science](https://mdneuzerling.com/post/data-science-workflows/).
+
+The main point of appeal for me here is portability--I wanted to be able to 
+hand it off to other people with minimal preparation. Ideally, `devtools` would allow for installing the entire thing from GitHub instead of sending scripts around, e.g. on the actual server. 
+
+## Back up a second
+
+At the time I'm writing this TASCHA's scripts run on AWS (specifically, on a Linux EC2 instance). This is not directly comparable to the laptop I work on even if I do have a Linux server locally. One of my goals has been minimizing the extent to which that is noticeable.
+
+Couple key points for the data engineering/data science intersection that's been happening here:
+
+1. From my perspective this has been an **ETL pipeline** problem. ETL stands for Extract/Transform/Load. It's a very generalized way of describing the idea of a process that pulls data from one or more sources, cleans/structures/munges/otherwise changes it to be more usable for the entity doing the pulling, and puts it (the structured data) somewhere for safekeeping. 
+2. The iSchool brought in Informatics students last year to make a **data warehouse**: a structured database for this data so it doesn't have to live in CSVs or be computed on the fly. (UW custom/convenience means that the null hypothesis is for that database to be built in *Microsoft SQL Server*, but that's not hugely relevant to this document.) 
+
+Problem: in order to do the second thing, one must first have structured data to work with. I have been focused on step one for the duration.
+
+### Second-guessing 
+
+One project-level note: what I eventually concluded was that it would've been ideal to come at this from two sides at the same time--make a temporary warehouse for the data TASCHA has now so that it's more accessible for less computing overhead, *and* improve the overall pipeline process. This is, for logistical and division of labor reasons, not what I started off doing. It is what I would recommend and/or attempt to do now, given either time travel abilities or the ability to keep working on it.
+
+## Important things to know
+
+Recurring theme of things that we want to know whenever we're dealing with data from my perspective:
+
+- Are there unique identifiers for some kind of entity that aren't dependent on human error? Where do they live?
+- What values are NA in disguise?
+- Are there fields that are many repetitions of a small number of repeating values? 
+
+SQL is much stricter about data type and cleaning than R. Both R and SQL are good at filtering large amounts of data based on a single unique identifier if you can dig one up.
+
+## So: packages
+
+My work to date has been in a package I called `HideousLaughter` (it's a Dungeons & Dragons pun). The IMLS doesn't provide a public API for the PLS data so the first thing I wanted to do was have an automated--so self-replicating--way to download the PLS result files so they'd be the same every time.
+
+Existing code also contains faster E-Rate downloading. 
+
+The biggest unfinished project was sparked by the realization that I wasn't comfortable making anyone depend on me (human, can misread things) transcribing metadata about hundreds of columns if there were places I could automate R doing it for me. The resulting flat file helper tool is always going to have some TASCHA genes from my perspective and will be available for anyone/everyone once it exists whether or not I'm here.
+
+[Here is the entire package on GitHub](https://github.com/cyrusae/HideousLaughter). It is very much a "work-in-progress scratchpad" kind of situation. To the point where you could check out `/inst` for progress reports/trial and error/notes (and the `summer` branch for variations). Ideally you won't have to.
+
+Following sections will explain some of the immediately-usable code.
+
+```{r setup}
+require(curl) #better downloads
+require(data.table) #big data wrangling
+require(magrittr) #use the pipe
+require(stringr) #wrangle strings
+require(assertthat) #enforce expected outputs
+require(here) #file path management (for now; rprojroot preferable)
+require(withr) #tempdir management; could also switch to withr pipe
+require(dplyr) #binding rows 
+### replace with poorman!
+require(furrr) #simultaneity
+```
