@@ -18,7 +18,7 @@ I used the C2 budget tool data to verify this. The general strategy here is to s
 
 Here is the verification:
 
-```{r}
+```{r, collapse=TRUE}
 #test filtering by url
 libraries <- 'https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library&$limit=100000000'
 lib_test <- curl::curl_download(url = libraries,
@@ -34,7 +34,7 @@ fread(file = lib_sys_test)
 
 This is the approach I used to download "Library" and "Library System" data separately and then bind them together:
 
-```{r}
+```{r, collapse=TRUE}
 curl::curl_download(url = 'https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library&$limit=1000000000',
                       destfile = 'lib.csv')
 curl::curl_download(url = 'https://opendata.usac.org/resource/6brt-5pbv.csv?applicant_type=Library%20System&$limit=1000000000',
