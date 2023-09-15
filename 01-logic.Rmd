@@ -44,6 +44,8 @@ The biggest unfinished project was sparked by the realization that I wasn't comf
 
 Following sections will explain some of the immediately-usable code.
 
+Here are the libraries needed for where I left off (not the ideal end state--but what runs right this second).
+
 ```{r setup, collapse=TRUE}
 require(curl) #better downloads
 require(data.table) #big data wrangling
