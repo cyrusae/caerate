@@ -1,0 +1,24 @@
+# Architecture 
+
+The actual intended outcome here is for TASCHA folks to be able to a) do more data science on the available data and b) feed it into an R Shiny dashboard. Both of those things want to be powered by a database when able.
+
+My goals have been:
+
+1. Download the files we're starting with, in the same way and the same place every time
+2. Predictable cleaning/filtering
+3. Save the filtered/clean versions,
+
+all in R--this also gives multiple places for a script to stop and check whether it's doing anything new. Later we want to 
+
+4. Load new data into the database 
+5. Add or update existing tables in our canonical database
+
+as conservatively as possible.
+
+## Second drafts
+
+The R package `targets` [exists to streamline exactly this kind of process](https://books.ropensci.org/targets/). ...But it's only usable once you actually have the process running. One of my long-term goals was/is to take advantage of `targets` instead of having all the attempted avoiding of duplicated labor be manual.
+
+I was introduced to `targets` via [this ode to its predecessor `drake`](https://mdneuzerling.com/post/upgrade-your-workflow-with-drake/), which makes a good case for why something occupying that space is desirable.
+
+From what I can tell, TASCHA's AWS installation has access to [Glue](https://aws.amazon.com/glue/). Glue can trigger some actions (like, "run script X when a new file is added to folder Y") that we can't daisy-chain together in R alone. So when there is an actual database to load CSVs into that would probably be how to prompt it to do so.
