@@ -41,6 +41,8 @@
 
 ## R Resources
 
+*(This does not include every library I've used or considered using, only ones that are directly applicable to the E-Rate analysis as it stands and/or vital to how I think about it.)*
+
 ### Quality-of-life and performance improvements 
 
 - **data.table**, supersedes data.frames; [keyed joins are vital](https://rdatatable.gitlab.io/data.table/articles/datatable-intro.html)
