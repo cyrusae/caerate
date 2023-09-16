@@ -1,0 +1,60 @@
+# Links and resources
+
+## Upstream data
+
+### PLS
+
+- [The IMLS's PLS data catalog](https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey)
+- (See also: [tools for scraping it more effectively](https://github.com/cyrusae/HideousLaughter/blob/main/R/pls.R))
+
+### USAC/E-Rate
+
+- [USAC's description of the applicant process](https://www.usac.org/e-rate/applicant-process/)
+- [USAC E-Rate datasets](https://opendata.usac.org/browse?category=E-Rate&limitTo=datasets&sortBy=alpha&utf8=%E2%9C%93)
+
+#### Cheatsheet to USAC datasets 
+
+(source: [this code scratchpad](https://github.com/cyrusae/HideousLaughter/blob/main/inst/ERate_scratchpad_1.Rmd))
+
+- URL format for all: ` https://opendata.usac.org/resource/{identity}.csv` 
+- All budgeted entities (C2 budget tool data): `6brt-5pbv` (initial sort)
+- Emergency Connectivity Fund (USAC fun-to-have add-on): `i5j4-3rvr`
+- Consultants: `g55z-erud` (also `x5px-esft` but the former appears slightly more complete?)
+- Open competitive bidding: `jp7a-89nd` (includes *applicant type* field, can filter on)
+- Consortia: `363f-22uh` (*consortium entity applicant type* can be filtered on)
+- Services requested: `39tn-hjzv` (key is application number; contains category, entities served, what type of thing they want)
+- Recipient details and commitments: `avi8-svp9` (key is application number; gestalt of other data sets and thus may or may not be desirable in itself)
+- Discount request basic information: `9s6i-myen` (includes discount calculation data)
+- Discount calculations: `upfy-khtr` (includes things not above; by application number)
+- Connectivity information: `ym44-rnhq` (includes barriers, speeds)
+- FRNs: `hbj5-2bpj` (includes purpose) 
+- FRN status: `qdmp-ygft` (includes fiber types)
+- Recipients of service: `tuem-agyq` (application-frn line alignment)
+- Supplemental entity information: `7i5i-83qf` (feat. *parent + child type, parent type supersedes when needed if library system*)
+
+
+## Code
+
+- [The source code for this document](https://github.com/cyrusae/caerate)
+- [My work-in-progress repository](https://github.com/cyrusae/HideousLaughter/tree/main)
+- [TASCHA E-Rate GitHub repository](https://github.com/tascha/E-Rate)
+
+## R Resources
+
+### Quality-of-life and performance improvements 
+
+- **data.table**, supersedes data.frames; [keyed joins are vital](https://rdatatable.gitlab.io/data.table/articles/datatable-intro.html)
+- **poorman**, drop-in [dplyr clone in base R](https://nathaneastwood.github.io/2020/04/01/poorman-first-release-of-a-base-r-dplyr-clone/)
+- **furrr**, [parallel processing upgrades](https://furrr.futureverse.org/)
+- **curl**, [better than base download.file](https://cran.r-project.org/web/packages/curl/index.html) for circumventing RSocrata bottlenecks
+
+### Meta/theory around development
+
+- [Why packages?](https://mdneuzerling.com/post/data-science-workflows/)
+- [Explanation of `targets`'s predecessor `drake`](https://mdneuzerling.com/post/upgrade-your-workflow-with-drake/)
+- [Win-Vector's R tricks](https://win-vector.com/tag/r-tricks/) (see also `wrapr`, below)
+
+### Future use
+
+- **wrapr**, [assorted utility/quality-of-life functions](https://winvector.github.io/wrapr/reference/index.html)
+- **targets**, [designed to automate this sort of thing wholesale](https://books.ropensci.org/targets/)
