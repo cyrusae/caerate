@@ -1,5 +1,10 @@
 # E-Rate data
 
+- **What:** Universal Service Administrative Co. E-Rate participation open data
+- **Where:** [USAC's open data platform](https://opendata.usac.org/browse?category=E-Rate&limitTo=datasets&sortBy=alpha&utf8=%E2%9C%93)
+
+(See the last section of this document for a breakdown of the datasets, [or alternately my scratchpad notes](https://github.com/cyrusae/HideousLaughter/blob/main/R/pls.R).)
+
 The most important thing I can tell you about USAC's E-Rate data is this: what they refer to as a BEN (Billed Entity Number) is a unique identifier used for both administrative entities and beneficiaries. One library/system/etc. might acquire *more than one* BEN because someone responsible for filing the paperwork forgot theirs, but they are never reassigned. This liberates us from human typos if we play our cards right.
 
 The second most important thing I can tell you is that if you approach the data by way of the right dataset NIFs don't seem to matter. (This is somewhat inside baseball; the purpose of it being laid out in this document is to explain to existing TASCHA folks what can change, not what NIFs are and why they're a problem.)
