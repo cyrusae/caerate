@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Logic | PLS/E-Rate wrangling overview</title>
-  <meta name="description" content="2 Logic | PLS/E-Rate wrangling overview" />
+  <title>6 Links and resources | PLS/E-Rate wrangling overview</title>
+  <meta name="description" content="6 Links and resources | PLS/E-Rate wrangling overview" />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Logic | PLS/E-Rate wrangling overview" />
+  <meta property="og:title" content="6 Links and resources | PLS/E-Rate wrangling overview" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Logic | PLS/E-Rate wrangling overview" />
+  <meta name="twitter:title" content="6 Links and resources | PLS/E-Rate wrangling overview" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="pls-data.html"/>
+<link rel="prev" href="architecture.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -197,79 +197,82 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="logic" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">2</span> Logic<a href="logic.html#logic" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="you-are-here" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> You are here<a href="logic.html#you-are-here" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The original working code I have to date was formatted as an R package. This is inspired by an encounter with <a href="https://mdneuzerling.com/post/data-science-workflows/">David Neuzerling’s arguments for package-driven development in data science</a>.</p>
-<p>The main point of appeal for me here is portability–I wanted to be able to
-hand it off to other people with minimal preparation. Ideally, <code>devtools</code> would allow for installing the entire thing from GitHub instead of sending scripts around, e.g. on the actual server.</p>
-</div>
-<div id="back-up-a-second" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Back up a second<a href="logic.html#back-up-a-second" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>At the time I’m writing this TASCHA’s scripts run on AWS (specifically, on a Linux EC2 instance). This is not directly comparable to the laptop I work on even if I do have a Linux server locally. One of my goals has been minimizing the extent to which that is noticeable.</p>
-<p>Couple key points for the data engineering/data science intersection that’s been happening here:</p>
-<ol style="list-style-type: decimal">
-<li>From my perspective this has been an <strong>ETL pipeline</strong> problem. ETL stands for Extract/Transform/Load. It’s a very generalized way of describing the idea of a process that pulls data from one or more sources, cleans/structures/munges/otherwise changes it to be more usable for the entity doing the pulling, and puts it (the structured data) somewhere for safekeeping.</li>
-<li>The iSchool brought in Informatics students last year to make a <strong>data warehouse</strong>: a structured database for this data so it doesn’t have to live in CSVs or be computed on the fly. (UW custom/convenience means that the null hypothesis is for that database to be built in <em>Microsoft SQL Server</em>, but that’s not hugely relevant to this document.)</li>
-</ol>
-<p>Problem: in order to do the second thing, one must first have structured data to work with. I have been focused on step one for the duration.</p>
-<div id="second-guessing" class="section level3 hasAnchor" number="2.2.1">
-<h3><span class="header-section-number">2.2.1</span> Second-guessing<a href="logic.html#second-guessing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>One project-level note: what I eventually concluded was that it would’ve been ideal to come at this from two sides at the same time–make a temporary warehouse for the data TASCHA has now so that it’s more accessible for less computing overhead, <em>and</em> improve the overall pipeline process. This is, for logistical and division of labor reasons, not what I started off doing. It is what I would recommend and/or attempt to do now, given either time travel abilities or the ability to keep working on it.</p>
-</div>
-</div>
-<div id="important-things-to-know" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Important things to know<a href="logic.html#important-things-to-know" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Recurring theme of things that we want to know whenever we’re dealing with data from my perspective:</p>
+<div id="links-and-resources" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> Links and resources<a href="links-and-resources.html#links-and-resources" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="upstream-data" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Upstream data<a href="links-and-resources.html#upstream-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="pls" class="section level3 hasAnchor" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> PLS<a href="links-and-resources.html#pls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>Are there unique identifiers for some kind of entity that aren’t dependent on human error? Where do they live?</li>
-<li>What values are NA in disguise?</li>
-<li>Are there fields that are many repetitions of a small number of repeating values?</li>
+<li><a href="https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey">The IMLS’s PLS data catalog</a></li>
+<li>(See also: <a href="https://github.com/cyrusae/HideousLaughter/blob/main/R/pls.R">tools for scraping it more effectively</a>)</li>
 </ul>
-<p>SQL is much stricter about data type and cleaning than R. Both R and SQL are good at filtering large amounts of data based on a single unique identifier if you can dig one up.</p>
 </div>
-<div id="so-packages" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> So: packages<a href="logic.html#so-packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>My work to date has been in a package I called <code>HideousLaughter</code> (it’s a Dungeons &amp; Dragons pun). The IMLS doesn’t provide a public API for the PLS data so the first thing I wanted to do was have an automated–so self-replicating–way to download the PLS result files so they’d be the same every time.</p>
-<p>Existing code also contains faster E-Rate downloading.</p>
-<p>The biggest unfinished project was sparked by the realization that I wasn’t comfortable making anyone depend on me (human, can misread things) transcribing metadata about hundreds of columns if there were places I could automate R doing it for me. The resulting flat file helper tool is always going to have some TASCHA genes from my perspective and will be available for anyone/everyone once it exists whether or not I’m here.</p>
-<p><a href="https://github.com/cyrusae/HideousLaughter">Here is the entire package on GitHub</a>. It is very much a “work-in-progress scratchpad” kind of situation. To the point where you could check out <code>/inst</code> for progress reports/trial and error/notes (and the <code>summer</code> branch for variations). Ideally you won’t have to.</p>
-<p>Following sections will explain some of the immediately-usable code.</p>
-<p>Here are the libraries needed for where I left off (not the ideal end state–but what runs right this second).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="logic.html#cb1-1" tabindex="-1"></a><span class="fu">require</span>(curl) <span class="co">#better downloads</span></span>
-<span id="cb1-2"><a href="logic.html#cb1-2" tabindex="-1"></a><span class="do">## Loading required package: curl</span></span>
-<span id="cb1-3"><a href="logic.html#cb1-3" tabindex="-1"></a><span class="do">## Using libcurl 7.81.0 with OpenSSL/3.0.2</span></span>
-<span id="cb1-4"><a href="logic.html#cb1-4" tabindex="-1"></a><span class="fu">require</span>(data.table) <span class="co">#big data wrangling</span></span>
-<span id="cb1-5"><a href="logic.html#cb1-5" tabindex="-1"></a><span class="do">## Loading required package: data.table</span></span>
-<span id="cb1-6"><a href="logic.html#cb1-6" tabindex="-1"></a><span class="fu">require</span>(magrittr) <span class="co">#use the pipe</span></span>
-<span id="cb1-7"><a href="logic.html#cb1-7" tabindex="-1"></a><span class="do">## Loading required package: magrittr</span></span>
-<span id="cb1-8"><a href="logic.html#cb1-8" tabindex="-1"></a><span class="fu">require</span>(stringr) <span class="co">#wrangle strings</span></span>
-<span id="cb1-9"><a href="logic.html#cb1-9" tabindex="-1"></a><span class="do">## Loading required package: stringr</span></span>
-<span id="cb1-10"><a href="logic.html#cb1-10" tabindex="-1"></a><span class="fu">require</span>(assertthat) <span class="co">#enforce expected outputs</span></span>
-<span id="cb1-11"><a href="logic.html#cb1-11" tabindex="-1"></a><span class="do">## Loading required package: assertthat</span></span>
-<span id="cb1-12"><a href="logic.html#cb1-12" tabindex="-1"></a><span class="fu">require</span>(here) <span class="co">#file path management (for now; rprojroot preferable)</span></span>
-<span id="cb1-13"><a href="logic.html#cb1-13" tabindex="-1"></a><span class="do">## Loading required package: here</span></span>
-<span id="cb1-14"><a href="logic.html#cb1-14" tabindex="-1"></a><span class="do">## here() starts at /home/watcher/GitHere/caerate</span></span>
-<span id="cb1-15"><a href="logic.html#cb1-15" tabindex="-1"></a><span class="fu">require</span>(withr) <span class="co">#tempdir management; could also switch to withr pipe to reduce dependencies, though.</span></span>
-<span id="cb1-16"><a href="logic.html#cb1-16" tabindex="-1"></a><span class="do">## Loading required package: withr</span></span>
-<span id="cb1-17"><a href="logic.html#cb1-17" tabindex="-1"></a><span class="fu">require</span>(dplyr) <span class="co">#binding rows </span><span class="al">###</span><span class="co"> replace with poorman!!</span></span>
-<span id="cb1-18"><a href="logic.html#cb1-18" tabindex="-1"></a><span class="do">## Loading required package: dplyr</span></span>
-<span id="cb1-19"><a href="logic.html#cb1-19" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-20"><a href="logic.html#cb1-20" tabindex="-1"></a><span class="do">## Attaching package: &#39;dplyr&#39;</span></span>
-<span id="cb1-21"><a href="logic.html#cb1-21" tabindex="-1"></a><span class="do">## The following objects are masked from &#39;package:data.table&#39;:</span></span>
-<span id="cb1-22"><a href="logic.html#cb1-22" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-23"><a href="logic.html#cb1-23" tabindex="-1"></a><span class="do">##     between, first, last</span></span>
-<span id="cb1-24"><a href="logic.html#cb1-24" tabindex="-1"></a><span class="do">## The following objects are masked from &#39;package:stats&#39;:</span></span>
-<span id="cb1-25"><a href="logic.html#cb1-25" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-26"><a href="logic.html#cb1-26" tabindex="-1"></a><span class="do">##     filter, lag</span></span>
-<span id="cb1-27"><a href="logic.html#cb1-27" tabindex="-1"></a><span class="do">## The following objects are masked from &#39;package:base&#39;:</span></span>
-<span id="cb1-28"><a href="logic.html#cb1-28" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb1-29"><a href="logic.html#cb1-29" tabindex="-1"></a><span class="do">##     intersect, setdiff, setequal, union</span></span>
-<span id="cb1-30"><a href="logic.html#cb1-30" tabindex="-1"></a><span class="fu">require</span>(furrr) <span class="co">#simultaneity</span></span>
-<span id="cb1-31"><a href="logic.html#cb1-31" tabindex="-1"></a><span class="do">## Loading required package: furrr</span></span>
-<span id="cb1-32"><a href="logic.html#cb1-32" tabindex="-1"></a><span class="do">## Loading required package: future</span></span></code></pre></div>
+<div id="usace-rate" class="section level3 hasAnchor" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> USAC/E-Rate<a href="links-and-resources.html#usace-rate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><a href="https://www.usac.org/e-rate/applicant-process/">USAC’s description of the applicant process</a></li>
+<li><a href="https://opendata.usac.org/browse?category=E-Rate&amp;limitTo=datasets&amp;sortBy=alpha&amp;utf8=%E2%9C%93">USAC E-Rate datasets</a></li>
+</ul>
+<div id="cheatsheet-to-usac-datasets" class="section level4 hasAnchor" number="6.1.2.1">
+<h4><span class="header-section-number">6.1.2.1</span> Cheatsheet to USAC datasets<a href="links-and-resources.html#cheatsheet-to-usac-datasets" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>(source: <a href="https://github.com/cyrusae/HideousLaughter/blob/main/inst/ERate_scratchpad_1.Rmd">this code scratchpad</a>)</p>
+<ul>
+<li>URL format for all: <code>https://opendata.usac.org/resource/{identity}.csv</code></li>
+<li>All budgeted entities (C2 budget tool data): <code>6brt-5pbv</code> (initial sort)</li>
+<li>Emergency Connectivity Fund (USAC fun-to-have add-on): <code>i5j4-3rvr</code></li>
+<li>Consultants: <code>g55z-erud</code> (also <code>x5px-esft</code> but the former appears slightly more complete?)</li>
+<li>Open competitive bidding: <code>jp7a-89nd</code> (includes <em>applicant type</em> field, can filter on)</li>
+<li>Consortia: <code>363f-22uh</code> (<em>consortium entity applicant type</em> can be filtered on)</li>
+<li>Services requested: <code>39tn-hjzv</code> (key is application number; contains category, entities served, what type of thing they want)</li>
+<li>Recipient details and commitments: <code>avi8-svp9</code> (key is application number; gestalt of other data sets and thus may or may not be desirable in itself)</li>
+<li>Discount request basic information: <code>9s6i-myen</code> (includes discount calculation data)</li>
+<li>Discount calculations: <code>upfy-khtr</code> (includes things not above; by application number)</li>
+<li>Connectivity information: <code>ym44-rnhq</code> (includes barriers, speeds)</li>
+<li>FRNs: <code>hbj5-2bpj</code> (includes purpose)</li>
+<li>FRN status: <code>qdmp-ygft</code> (includes fiber types)</li>
+<li>Recipients of service: <code>tuem-agyq</code> (application-frn line alignment)</li>
+<li>Supplemental entity information: <code>7i5i-83qf</code> (feat. <em>parent + child type, parent type supersedes when needed if library system</em>)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="code" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Code<a href="links-and-resources.html#code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><a href="https://github.com/cyrusae/caerate">The source code for this document</a></li>
+<li><a href="https://github.com/cyrusae/HideousLaughter/tree/main">My work-in-progress repository</a></li>
+<li><a href="https://github.com/tascha/E-Rate">TASCHA E-Rate GitHub repository</a></li>
+</ul>
+</div>
+<div id="r-resources" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> R Resources<a href="links-and-resources.html#r-resources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><em>(This does not include every library I’ve used or considered using, only ones that are directly applicable to the E-Rate analysis as it stands and/or vital to how I think about it.)</em></p>
+<div id="quality-of-life-and-performance-improvements" class="section level3 hasAnchor" number="6.3.1">
+<h3><span class="header-section-number">6.3.1</span> Quality-of-life and performance improvements<a href="links-and-resources.html#quality-of-life-and-performance-improvements" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>data.table</strong>, supersedes data.frames; <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-intro.html">keyed joins are vital</a></li>
+<li><strong>poorman</strong>, drop-in <a href="https://nathaneastwood.github.io/2020/04/01/poorman-first-release-of-a-base-r-dplyr-clone/">dplyr clone in base R</a></li>
+<li><strong>furrr</strong>, <a href="https://furrr.futureverse.org/">parallel processing upgrades</a></li>
+<li><strong>curl</strong>, <a href="https://cran.r-project.org/web/packages/curl/index.html">better than base download.file</a> for circumventing RSocrata bottlenecks</li>
+</ul>
+</div>
+<div id="metatheory-around-development" class="section level3 hasAnchor" number="6.3.2">
+<h3><span class="header-section-number">6.3.2</span> Meta/theory around development<a href="links-and-resources.html#metatheory-around-development" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><a href="https://mdneuzerling.com/post/data-science-workflows/">Why packages?</a></li>
+<li><a href="https://mdneuzerling.com/post/upgrade-your-workflow-with-drake/">Explanation of <code>targets</code>’s predecessor <code>drake</code></a></li>
+<li><a href="https://win-vector.com/tag/r-tricks/">Win-Vector’s R tricks</a> (see also <code>wrapr</code>, below)</li>
+</ul>
+</div>
+<div id="future-use" class="section level3 hasAnchor" number="6.3.3">
+<h3><span class="header-section-number">6.3.3</span> Future use<a href="links-and-resources.html#future-use" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>wrapr</strong>, <a href="https://winvector.github.io/wrapr/reference/index.html">assorted utility/quality-of-life functions</a></li>
+<li><strong>targets</strong>, <a href="https://books.ropensci.org/targets/">designed to automate this sort of thing wholesale</a></li>
+</ul>
 
+</div>
 </div>
 </div>
             </section>
@@ -277,8 +280,8 @@ hand it off to other people with minimal preparation. Ideally, <code>devtools</c
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="pls-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="architecture.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

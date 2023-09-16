@@ -1,6 +1,8 @@
 about-this-document
-logic
+context
 contents
+logic
+you-are-here
 back-up-a-second
 second-guessing
 important-things-to-know
@@ -14,3 +16,13 @@ why-is-all-of-the-above-important
 what-next
 architecture
 second-drafts
+links-and-resources
+upstream-data
+pls
+usace-rate
+cheatsheet-to-usac-datasets
+code
+r-resources
+quality-of-life-and-performance-improvements
+metatheory-around-development
+future-use
