@@ -12,7 +12,10 @@ output:
 
 ## Context
 
-
+- **Data this is working with:** The Public Libraries Survey ([here](https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey), used as the functional universe of all possible public libraries in the US) and information about applications for federal telecommunications funding for educational institutions ([E-Rate program, here](https://opendata.usac.org/browse?category=E-Rate&limitTo=datasets&sortBy=alpha&utf8=%E2%9C%93), contains thousands of PLS respondents but not all of them and not necessarily identifiable at first sight)
+- **Why we care:** E-Rate was originally intended to subsidize telecommunications equipment for schools; libraries were kind of kludged in at the last minute; ways to track (a) whether libraries are accessing funding they're eligible for and (b) whether they get their money's worth when they do are thin on the ground.
+- **Who is 'we':** TASCHA @ the University of Washington, c. summer 2023, specifically for the purpose of this documentation [me](https://github.com/cyrusae) working for/with Chris Jowaisas 
+- **What I'm doing:** Some efforts to make retrieval and filtering of information from both of those sources, and cross-referencing between the two, easier and/or possible.
 
 ## Contents
 
