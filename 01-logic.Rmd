@@ -1,6 +1,6 @@
 # Logic
 
-## Contents
+## You are here
 
 The original working code I have to date was formatted as an R package. This is inspired by an encounter with [David Neuzerling's arguments for package-driven development in data science](https://mdneuzerling.com/post/data-science-workflows/).
 

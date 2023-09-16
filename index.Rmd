@@ -10,6 +10,12 @@ output:
 
 # About this document 
 
+## Context
+
+
+
+## Contents
+
 This is a collection of notes and commented code that serves--or at least tries to serve--as an overview of the work I've done with TASCHA over the past year. This means there are several genres of topic being covered:
 
 - *data*, as in information about the nature of the PLS (Public Library Survey) and E-Rate data;
