@@ -1,5 +1,8 @@
 # PLS data
 
+- **What:** The Institute of Museum and Library Services' Public Libraries Survey
+- **Where:** [Human-facing data catlog here](https://www.imls.gov/research-evaluation/data-collection/public-libraries-survey)
+
 Important things to know: PLS data has idiosyncratic flags for blanks/NAs that will bias how R interprets columns of their data. Their filenames and the structure of the `.zip`s the IMLS releases can vary from year to year. The website they're on is pretty stable but doesn't have a machine-accessible API.
 
 ## Some libraries here and why to use them
@@ -15,6 +18,8 @@ Some caveats:
 -   I was using base `download.file` here; **curl** is faster and cleaner.
 
 ## PLS download and cleaning utilities
+
+[Original context here.](https://github.com/cyrusae/HideousLaughter/blob/main/R/pls.R)
 
 Comments with `#'` are taking advantage of a Roxygen documentation skeleton (see arguments for package-shaped development). Key functions from the `pls.R` file:
 
